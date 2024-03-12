@@ -10,9 +10,7 @@ import { image } from '../../../../assets/images/index';
 // Styled component for curved boundary
 const CurvedGrid = styled(Grid)(({ theme }) => ({
   borderRadius: theme.spacing(0),
-  overflow: 'hidden',
-
-
+  overflow: 'hidden'
 }));
 // // ===============================|| AUTH3 -Login ||=============================== //
 const Login = () => {
@@ -20,22 +18,31 @@ const Login = () => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
 
   return (
-
     <AuthWrapper1>
-
-      <Grid container justifyContent="center" alignItems="stretch" sx={{ padding: 0, maxWidth: '100%', maxHeight: '100vh', overflowY: 'auto' }}>
+      <Grid
+        container
+        justifyContent="center"
+        alignItems="stretch"
+        sx={{ padding: 0, maxWidth: '100%', maxHeight: '100vh', overflowY: 'auto' }}
+      >
         {/* first grid */}
         {!matchDownSM && (
           <Grid item xs={12} sm={8} md={6} lg={5} sx={{ margin: 0 }}>
             <Grid item xs={12} component={CurvedGrid} sx={{ bgcolor: 'background.paper', boxShadow: 3, height: '100%', padding: 0 }}>
-              <Typography color={theme.palette.common.black} fontStyle="italic" fontSize="1.5rem" gutterBottom variant={matchDownSM ? 'h3' : 'h2'} style={{ textAlign: 'center' }} sx={{ mt: 3 }}>
+              <Typography
+                color={theme.palette.common.black}
+                fontStyle="italic"
+                fontSize="1.5rem"
+                gutterBottom
+                variant={matchDownSM ? 'h3' : 'h2'}
+                style={{ textAlign: 'center' }}
+                sx={{ mt: 3 }}
+              >
                 Welcome to Paradox Study, your premier online platform for accessing study materials and notes.
               </Typography>
               <Grid item xs={12} sx={{ mb: 6 }}>
                 {/* Conditionally render the image based on screen size */}
-                {!matchDownSM && (
-                  <img src={image} alt="loginimage" width="500" />
-                )}
+                {!matchDownSM && <img src={image} alt="loginimage" width="500" />}
               </Grid>
             </Grid>
           </Grid>
