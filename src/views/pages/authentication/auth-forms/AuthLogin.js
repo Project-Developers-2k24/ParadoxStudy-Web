@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -203,7 +205,7 @@ const FirebaseLogin = ({ ...others }) => {
                 }
                 label="Remember me"
               />
-              <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+              <Typography component={Link} to="/pages/register/ForgotPassword" variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
                 Forgot Password?
               </Typography>
             </Stack>
