@@ -23,16 +23,16 @@ const Login = () => {
         container
         justifyContent="center"
         alignItems="stretch"
-        sx={{ padding: 0, maxWidth: '100%', maxHeight: '100vh', overflowY: 'auto' }}
+        sx={{bgcolor: 'background.paper', padding: 0,maxWidth:'100%', height: '100vh' }}
       >
         {/* first grid */}
         {!matchDownSM && (
           <Grid item xs={12} sm={8} md={6} lg={5} sx={{ margin: 0 }}>
-            <Grid item xs={12} component={CurvedGrid} sx={{ bgcolor: 'background.paper', boxShadow: 3, height: '100%', padding: 0 }}>
+            <Grid item xs={12} component={CurvedGrid} sx={{ bgcolor: 'background.default', boxShadow: 3, height: '100%', padding: 0 }}>
               <Typography
-                color={theme.palette.common.black}
-                fontStyle="italic"
-                fontSize="1.5rem"
+                color="InfoText"
+                fontFamily="sans-serif"
+                fontSize="1.3rem"
                 gutterBottom
                 variant={matchDownSM ? 'h3' : 'h2'}
                 style={{ textAlign: 'center' }}
@@ -40,9 +40,9 @@ const Login = () => {
               >
                 Welcome to Paradox Study, your premier online platform for accessing study materials and notes.
               </Typography>
-              <Grid item xs={12} sx={{ mb: 6 }}>
+              <Grid item xs={12} sx={{ bgcolor: 'background.default', mb: 6 ,justifyContent:'center'}}>
                 {/* Conditionally render the image based on screen size */}
-                {!matchDownSM && <img src={image} alt="loginimage" width="500" />}
+                {!matchDownSM && <img src={image}  alt="loginimage" width="500" />}
               </Grid>
             </Grid>
           </Grid>
@@ -54,14 +54,20 @@ const Login = () => {
             <Grid container direction="column" justifyContent="center" alignItems="center" sx={{ height: '100%', padding: 2 }}>
               <Grid item sx={{ m: { xs: 1, sm: 3 }, mb: 0 }}>
                 <AuthCardWrapper>
-                  <Grid container spacing={2} alignItems="center" justifyContent="center">
-                    <Grid item sx={{ mb: 3 }}>
-                      <Link to="#"></Link>
-                    </Grid>
+                  <Grid container spacing={1} alignItems="center" justifyContent="center">
+                    {/* logo grid */}
+                  {/* <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
+                      <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
+                        <img src={logo} alt="logoimage" width="40" style={{ marginRight: '20px', borderRadius: '6px' }} />
+                        <Typography fontFamily="sans-serif" fontStyle="oblique" color="InfoText" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
+                          ParadoX Study
+                        </Typography>
+                      </Grid>
+                    </Grid> */}
                     <Grid item xs={12}>
                       <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
                         <Grid item>
-                          <Stack alignItems="center" justifyContent="center" spacing={1}>
+                          <Stack alignItems="center" justifyContent="center" >
                             <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                               Hi, Welcome Back
                             </Typography>
