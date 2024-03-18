@@ -10,19 +10,17 @@ const ResetContainer = styled(Container)(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: '100vh',
+  height: '100vh'
 }));
 
 const ResetPaper = styled(Paper)(() => ({
-  padding: "20px",
+  padding: '20px',
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
+  alignItems: 'center'
 }));
 
 const ResetPassword = () => {
-
-
   // State for form input values
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -83,10 +81,10 @@ const ResetPassword = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                <AnimateButton>
+                  <AnimateButton>
                     <Button
                       disableElevation
-                    //   disabled={isSubmitting}
+                      //   disabled={isSubmitting}
                       fullWidth
                       size="large"
                       type="submit"
