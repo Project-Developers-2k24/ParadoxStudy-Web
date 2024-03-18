@@ -7,13 +7,12 @@ import { useTheme } from '@mui/material/styles';
 import {
   Box,
   Button,
- 
   FormControl,
   FormHelperText,
   Grid,
   InputLabel,
   OutlinedInput,
-  Typography,
+  Typography
   // useMediaQuery
 } from '@mui/material';
 
@@ -31,7 +30,6 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 // ============================|| FIREBASE - RESET PASSWORD ||============================ //
 
 const FirebaseResetPassword = ({ ...others }) => {
-  
   const theme = useTheme();
   const scriptedRef = useScriptRef();
   // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));

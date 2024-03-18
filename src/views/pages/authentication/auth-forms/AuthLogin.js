@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
@@ -28,7 +27,6 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 // project imports
-import useScriptRef from 'hooks/useScriptRef';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 
 // assets
@@ -36,12 +34,15 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Google from 'assets/images/icons/social-google.svg';
+import { LOGIN } from 'api/auth';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
-  const scriptedRef = useScriptRef();
+  const navigate=useNavigate();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
@@ -122,8 +123,8 @@ const FirebaseLogin = ({ ...others }) => {
 
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          email: '',
+          password: '',
           submit: null
         }}
         validationSchema={Yup.object().shape({
@@ -132,17 +133,33 @@ const FirebaseLogin = ({ ...others }) => {
         })}
         onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
           try {
-            if (scriptedRef.current) {
+            // Make a POST request using Axios
+            const response = await axios.post(LOGIN, {
+              email: values.email,
+              password: values.password
+              // Include any other registration data you want to send
+            });
+
+            // Handle the response accordingly
+            if (response.status === 200) {
+              // Registration successful
+              toast.success(response.data.message);
+              navigate('/');
               setStatus({ success: true });
               setSubmitting(false);
-            }
-          } catch (err) {
-            console.error(err);
-            if (scriptedRef.current) {
+            } else {
+              // Registration failed
               setStatus({ success: false });
-              setErrors({ submit: err.message });
               setSubmitting(false);
+              setErrors({ submit: 'Registration failed. Please try again.' });
             }
+          } catch (error) {
+            toast.error(error.response.data.message);
+            console.error('Error:', error);
+            // Handle error response
+            setStatus({ success: false });
+            setSubmitting(false);
+            setErrors({ submit: 'Registration failed. Please try again.' });
           }
         }}
       >
@@ -205,7 +222,13 @@ const FirebaseLogin = ({ ...others }) => {
                 }
                 label="Remember me"
               />
-              <Typography component={Link} to="/pages/register/ForgotPassword" variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
+              <Typography
+                component={Link}
+                to="/pages/register/ForgotPassword"
+                variant="subtitle1"
+                color="secondary"
+                sx={{ textDecoration: 'none', cursor: 'pointer' }}
+              >
                 Forgot Password?
               </Typography>
             </Stack>
