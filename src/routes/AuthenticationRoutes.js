@@ -10,6 +10,7 @@ const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/aut
 
 import ForgotPassword from 'views/pages/authentication/authentication3/ForgotPassword';
 import ResetPassword from 'views/pages/authentication/authentication3/ResetPassword';
+import Verified from 'views/pages/authentication/Verified';
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
@@ -32,6 +33,10 @@ const AuthenticationRoutes = {
     {
       path: '/pages/register/resetpassword',
       element: <ResetPassword />
+    },
+    {
+      path: '/pages/register/verified/:id',
+      element: <Verified />
     }
   ]
 };
