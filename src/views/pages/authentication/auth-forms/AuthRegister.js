@@ -67,7 +67,7 @@ const FirebaseRegister = ({ ...others }) => {
       // Handle response if needed
 
       toast.success(response.data.message);
-      navigate('/pages/login/login3')
+      navigate('/pages/login/login3');
 
       setStatus();
       setSubmitting(false);
