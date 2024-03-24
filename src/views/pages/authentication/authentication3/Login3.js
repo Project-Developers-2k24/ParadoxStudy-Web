@@ -5,7 +5,7 @@ import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from '../auth-forms/AuthLogin';
 //assets
-import { image } from '../../../../assets/images/index';
+import { image, logo } from '../../../../assets/images/index';
 
 // Styled component for curved boundary
 const CurvedGrid = styled(Grid)(({ theme }) => ({
@@ -23,7 +23,7 @@ const Login = () => {
         container
         justifyContent="center"
         alignItems="stretch"
-        sx={{bgcolor: 'background.paper', padding: 0,maxWidth:'100%', height: '100vh' }}
+        sx={{ bgcolor: 'background.paper', padding: 0, maxWidth: '100%', height: '100vh' }}
       >
         {/* first grid */}
         {!matchDownSM && (
@@ -40,9 +40,9 @@ const Login = () => {
               >
                 Welcome to Paradox Study, your premier online platform for accessing study materials and notes.
               </Typography>
-              <Grid item xs={12} sx={{ bgcolor: 'background.default', mb: 6 ,justifyContent:'center'}}>
+              <Grid item xs={12} sx={{ bgcolor: 'background.default', mb: 6, justifyContent: 'center' }}>
                 {/* Conditionally render the image based on screen size */}
-                {!matchDownSM && <img src={image}  alt="loginimage" width="500" />}
+                {!matchDownSM && <img src={image} alt="loginimage" width="500" />}
               </Grid>
             </Grid>
           </Grid>
@@ -56,19 +56,18 @@ const Login = () => {
                 <AuthCardWrapper>
                   <Grid container spacing={1} alignItems="center" justifyContent="center">
                     {/* logo grid */}
-                  {/* <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
-                      <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={logo} alt="logoimage" width="40" style={{ marginRight: '20px', borderRadius: '6px' }} />
-                        <Typography fontFamily="sans-serif" fontStyle="oblique" color="InfoText" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
-                          ParadoX Study
-                        </Typography>
+                    <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 1 }}>
+                      <Grid item xs={12}>
+                        <Grid container direction="row" justifyContent="center" alignItems="center">
+                          <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <img src={logo} alt="logoimage" width="400" />
+                          </Grid>
+                        </Grid>
                       </Grid>
-                    </Grid> */}
-                    <Grid item xs={12}>
                       <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
                         <Grid item>
                           <Stack alignItems="center" justifyContent="center" >
-                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
+                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}  >
                               Hi, Welcome Back
                             </Typography>
                             <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
