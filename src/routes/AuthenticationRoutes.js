@@ -31,7 +31,7 @@ const AuthenticationRoutes = {
       element: <ForgotPassword />
     },
     {
-      path: '/pages/register/resetpassword',
+      path: '/pages/resetpassword/:id/:token',
       element: <ResetPassword />
     },
     {
