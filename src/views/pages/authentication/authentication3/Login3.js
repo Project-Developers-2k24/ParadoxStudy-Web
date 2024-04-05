@@ -23,7 +23,7 @@ const Login = () => {
         container
         justifyContent="center"
         alignItems="stretch"
-        sx={{ bgcolor: 'background.paper', padding: 0, maxWidth: '100%', height: '100vh' }}
+        sx={{ bgcolor: 'background.paper', padding: 0, maxWidth: '100%', height: '100vh',  }}
       >
         {/* first grid */}
         {!matchDownSM && (
@@ -60,7 +60,7 @@ const Login = () => {
                       <Grid item xs={12}>
                         <Grid container direction="row" justifyContent="center" alignItems="center">
                           <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <img src={logo} alt="logoimage" width="400" />
+                            <img src={logo} alt="logoimage" width="300" />
                           </Grid>
                         </Grid>
                       </Grid>
