@@ -10,6 +10,7 @@ import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 import TotalIncomeDarkCard from './TotalIncomeDarkCard';
 import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
+import Footer from '../Footer';
 import { gridSpacing } from 'store/constant';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
@@ -52,7 +53,11 @@ const Dashboard = () => {
           </Grid>
         </Grid>
       </Grid>
+      <Grid item lg={12} md={6} sm={6} xs={12}>
+        <Footer isLoading={isLoading} />
+      </Grid>
     </Grid>
+
   );
 };
 
