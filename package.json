@@ -2,7 +2,7 @@
   "name": "paradoxstudy",
   "version": "0.1.0",
   "private": true,
-  "proxy":"https://paradoxstudy-backend.cyclic.app",
+  "proxy": "https://paradoxstudy-backend.cyclic.app",
   "homepage": "https://65ed6e34aaf1ae4458f26b9d--paradoxstu.netlify.app",
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -36,7 +36,9 @@
     "react-router": "^6.22.2",
     "react-router-dom": "^6.22.2",
     "react-scripts": "5.0.1",
+    "react-simple-typewriter": "^5.0.1",
     "react-toastify": "^10.0.5",
+    "react-typed": "^2.0.12",
     "redux": "^5.0.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"
