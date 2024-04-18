@@ -49,9 +49,12 @@ const ForgotPassword = () => {
           <div className="wrapper">
             {/* Use form element to handle submission */}
             <form onSubmit={resetPasswordEmail}>
-              <div className="input-data"  style={{
-                    marginBottom:"20px"
-                  }}>
+              <div
+                className="input-data"
+                style={{
+                  marginBottom: '20px'
+                }}
+              >
                 <input
                   type="email"
                   name="email"
@@ -59,7 +62,6 @@ const ForgotPassword = () => {
                   placeholder="Enter your Registered Email ID"
                   required
                   onChange={(e) => setEmail(e.target.value)}
-                 
                 />
                 <div className="underline"></div>
               </div>
