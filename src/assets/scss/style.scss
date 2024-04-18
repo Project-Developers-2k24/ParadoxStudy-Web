@@ -53,6 +53,24 @@
   }
 }
 
+//giving margin to dashboard
+.css-kvip5o-MuiToolbar-root{
+  margin-bottom: -30px;
+}
+.css-9d4wr9{
+  margin-top:90px;
+  
+}
+
+.css-ohi407{
+  margin-top: 130px;
+}
+
+.css-qpq9bu {
+  display: block;
+  height: 95px;
+}
+
 // ==============================|| ANIMATION KEYFRAMES ||============================== //
 
 @keyframes wings {
@@ -125,5 +143,97 @@
   }
   75% {
     transform: translateX(10px);
+  }
+}
+/*animation on svg image*/
+.custom-shape-divider-bottom-1712342805 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+.custom-shape-divider-bottom-1712342805 svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 200px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1712342805 .shape-fill {
+  fill: #FFFFFF;
+}
+/*Animations of image*/
+.animated-image {
+  animation: moveUpDown 3s ease infinite;
+  transform-origin: bottom;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Add shadow on hover */
+.animated-image:hover {
+ 
+  box-shadow: 0 2px 10px rgb(192, 187, 187);
+  
+}
+@keyframes moveUpDown {
+  from {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.plant {
+  animation: moveplant 3s ease infinite;
+  transform-origin: bottom;
+  transform-box: fill-box;
+}
+
+@keyframes moveplant {
+  from {
+   scale: 0.5;
+  }
+  
+  to {
+    scale: 1.5;
+  }
+}
+.book {
+  animation: movebook 3s ease infinite;
+  transform-origin: bottom;
+  transform-box: fill-box;
+}
+
+@keyframes movebook {
+  from {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Apply animation to image */
+
+
+/*blinking cursor*/
+blinkingCursor{
+  content:'|';
+  color: aqua;
+  animation: blink 2s step-start infinite;
+}
+@keyframes blink{
+  50%{
+    opacity: 0;
   }
 }

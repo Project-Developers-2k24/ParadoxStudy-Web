@@ -5,7 +5,7 @@ import AuthWrapper1 from '../AuthWrapper1';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthRegister from '../auth-forms/AuthRegister';
 //assets
-import { image } from '../../../../assets/images/index';
+import { image ,logo} from '../../../../assets/images/index';
 const CurvedGrid = styled(Grid)(({ theme }) => ({
   borderRadius: theme.spacing(0),
   overflow: 'hidden',
@@ -30,15 +30,15 @@ const Register = () => {
                 <AuthCardWrapper>
                   <Grid container spacing={2} alignItems="center" justifyContent="center">
                     {/* logo grid */}
-                    {/* <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 3 }}>
-                      <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center' }}>
-                        <img src={logo} alt="logoimage" width="40" style={{ marginRight: '20px', borderRadius: '6px' }} />
-                        <Typography fontFamily="sans-serif" fontStyle="oblique" color="InfoText" gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
-                          ParadoX Study
-                        </Typography>
+                    <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 1 }}>
+                      <Grid item xs={12}>
+                        <Grid container direction="row" justifyContent="center" alignItems="center">
+                          <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <img src={logo} alt="logoimage" width="400" />
+                          </Grid>
+                        </Grid>
                       </Grid>
-                    </Grid> */}
-                    
+                    </Grid>
                     <Grid item xs={12}>
                       <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
                         <Grid item>

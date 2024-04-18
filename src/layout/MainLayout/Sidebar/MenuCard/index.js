@@ -37,6 +37,8 @@ const CardStyle = styled(Card)(({ theme }) => ({
   marginBottom: '22px',
   overflow: 'hidden',
   position: 'relative',
+  top: '-105px',
+  zIndex: 1, 
   '&:after': {
     content: '""',
     position: 'absolute',
@@ -44,7 +46,7 @@ const CardStyle = styled(Card)(({ theme }) => ({
     height: '157px',
     background: theme.palette.primary[200],
     borderRadius: '50%',
-    top: '-105px',
+    top: '-108px',
     right: '-96px'
   }
 }));
