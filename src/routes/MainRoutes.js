@@ -3,6 +3,10 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from '../layout/MainLayout';
 import Loadable from '../ui-component/Loadable';
+import YearSelectionPage from 'views/dashboard/Default/yearSelection';
+import NotesComponent from 'views/dashboard/Default/Notehandle';
+import PDFViewer from 'views/dashboard/Default/PDFViewer';
+
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
@@ -33,9 +37,33 @@ const MainRoutes = {
         {
           path: 'default',
           element: <DashboardDefault />
+        },
+       
+      ]
+    },
+    {
+      path:'year-selection',
+      element:<YearSelectionPage/>
+    },
+    {
+      path: 'year-select',
+      children: [
+        {
+          path: 'year-selection',
+          element: <YearSelectionPage />
         }
       ]
     },
+    {
+      path:'notes-download/:subject',
+      element:<NotesComponent/>
+    },
+    
+    {
+      path:'pdf-viewer',
+      element:<PDFViewer/>
+    },
+    
     {
       path: 'utils',
       children: [
