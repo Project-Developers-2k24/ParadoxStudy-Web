@@ -1,34 +1,27 @@
+import React, { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
-
-// material-ui
-import { styled, useTheme } from '@mui/material/styles';
-import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
-
-// project imports
+import { Box, Grid, Typography } from '@mui/material';
+import { styled } from '@mui/material/styles';
 import MainCard from 'ui-component/cards/MainCard';
-import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
+import { useNavigate } from 'react-router';
 
-// assets
-import EarningIcon from 'assets/images/icons/earning.svg';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
-import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
-import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
-import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 
+// Styled MainCard wrapper
 const CardWrapper = styled(MainCard)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.dark,
-  color: '#fff',
+  color: 'white',
   overflow: 'hidden',
   position: 'relative',
+  transition: 'transform 0.3s ease-in-out', // Add transition for smooth effect
+  '&:hover': {
+    transform: 'scale(0.95)' // Apply the zoom-out effect on hover
+  },
   '&:after': {
     content: '""',
     position: 'absolute',
     width: 210,
     height: 210,
-    background: theme.palette.secondary[800],
+    background: theme.palette.secondary[600],
     borderRadius: '50%',
     top: -85,
     right: -95,
@@ -54,132 +47,181 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
   }
 }));
 
-// ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const EarningCard = ({ isLoading }) => {
-  const theme = useTheme();
+const BranchCard = ({ branch, onClick }) => {
+  return (
+    <Box mb={1} onClick={() => onClick(branch)}>
+      <CardWrapper border={false} content={false}>
+        <Box sx={{ p: 2.25 }}>
+          <Typography color="white" variant="h6" align="center" gutterBottom>
+            {branch}
+          </Typography>
+        </Box>
+      </CardWrapper>
+    </Box>
+  );
+};
+const SubjectCard = ({ subjects }) => {
+  const navigate = useNavigate();
 
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleSubjectClick = (subject) => {
+    // Navigate to the notes-download component passing both branch and subject
+    navigate(`/notes-download/${subject}`);
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  return (
+    <Box mb={0.5}> {/* Adjust the mb value to reduce the gap */}
+      {subjects.map((subject, index) => (
+        <Box key={index} onClick={() => handleSubjectClick(subject)}>
+          <Typography color="white" variant="h6" align="center" gutterBottom>
+            Subject {index + 1}
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <CardWrapper border={false} content={false}>
+                <Box sx={{ p: 2.25 }}>
+                  <Typography color="white" variant="subtitle1" align="center" gutterBottom>
+                    {subject}
+                  </Typography>
+                </Box>
+              </CardWrapper>
+            </Grid>
+          </Grid>
+        </Box>
+      ))}
+    </Box>
+  );
+};
+
+
+
+
+
+const EarningCard = ({ yearSemData, isLoading }) => {
+  const [selectedYear, setSelectedYear] = useState(null);
+  const [selectedSemester, setSelectedSemester] = useState(null);
+  const [selectedBranch, setSelectedBranch] = useState(null);
+  const scrollRef = useRef(null);
+  const handleSemesterClick = (year, semester) => {
+    setSelectedYear(year);
+    setSelectedSemester(semester);
+    setSelectedBranch(null);
+  };
+
+  const handleBranchClick = (branch) => {
+    setSelectedBranch(branch);
+    scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'start' });
   };
 
   return (
     <>
-      {isLoading ? (
-        <SkeletonEarningCard />
-      ) : (
-        <CardWrapper border={false} content={false}>
-          <Box sx={{ p: 2.25 }}>
-            <Grid container direction="column">
-              <Grid item>
-                <Grid container justifyContent="space-between">
-                  <Grid item>
-                    <Avatar
-                      variant="rounded"
-                      sx={{
-                        ...theme.typography.commonAvatar,
-                        ...theme.typography.largeAvatar,
-                        backgroundColor: theme.palette.secondary[800],
-                        mt: 1
-                      }}
-                    >
-                      <img src={EarningIcon} alt="Notification" />
-                    </Avatar>
-                  </Grid>
-                  <Grid item>
-                    <Avatar
-                      variant="rounded"
-                      sx={{
-                        ...theme.typography.commonAvatar,
-                        ...theme.typography.mediumAvatar,
-                        backgroundColor: theme.palette.secondary.dark,
-                        color: theme.palette.secondary[200],
-                        zIndex: 1
-                      }}
-                      aria-controls="menu-earning-card"
-                      aria-haspopup="true"
-                      onClick={handleClick}
-                    >
-                      <MoreHorizIcon fontSize="inherit" />
-                    </Avatar>
-                    <Menu
-                      id="menu-earning-card"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                      variant="selectedMenu"
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'right'
-                      }}
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right'
-                      }}
-                    >
-                      <MenuItem onClick={handleClose}>
-                        <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Card
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <FileCopyTwoToneIcon sx={{ mr: 1.75 }} /> Copy Data
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <PictureAsPdfTwoToneIcon sx={{ mr: 1.75 }} /> Export
-                      </MenuItem>
-                      <MenuItem onClick={handleClose}>
-                        <ArchiveTwoToneIcon sx={{ mr: 1.75 }} /> Archive File
-                      </MenuItem>
-                    </Menu>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container alignItems="center">
-                  <Grid item>
-                    <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>$500.00</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Avatar
-                      sx={{
-                        cursor: 'pointer',
-                        ...theme.typography.smallAvatar,
-                        backgroundColor: theme.palette.secondary[200],
-                        color: theme.palette.secondary.dark
-                      }}
-                    >
-                      <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                    </Avatar>
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item sx={{ mb: 1.25 }}>
-                <Typography
-                  sx={{
-                    fontSize: '1rem',
-                    fontWeight: 500,
-                    color: theme.palette.secondary[200]
-                  }}
-                >
-                  Total Earning
-                </Typography>
-              </Grid>
+      {!isLoading && (
+        <Grid container spacing={2}>
+          {yearSemData.map((yearData) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={yearData.year}>
+              <CardWrapper border={false} content={false} onClick={() => setSelectedYear(yearData.year)}>
+                <Box sx={{ p: 2.25 }}>
+                  <Typography color="white" variant="h4" align="center" gutterBottom>
+                    {yearData.year} Year
+                  </Typography>
+                </Box>
+              </CardWrapper>
             </Grid>
-          </Box>
-        </CardWrapper>
+          ))}
+        </Grid>
+      )}
+
+      {selectedYear && (
+        <Grid container spacing={2} ref={scrollRef} >
+          <Grid item xs={12} sx={{ mt: 1, textAlign: 'center' }}>
+            <Typography variant="h4" gutterBottom>
+              Select Your Semester
+            </Typography>
+          </Grid>
+          {yearSemData
+            .filter((yearData) => yearData.year === selectedYear)
+            .map((yearData) => (
+              <Grid item xs={12} key={yearData.year}>
+
+                {yearData.semesters.map((semester) => (
+
+                  <Box key={semester.number} mb={1} onClick={() => handleSemesterClick(yearData.year, semester)}>
+
+                    <CardWrapper border={false} content={false}>
+                      <Box sx={{ p: 2.25 }}>
+                        <Typography color="white" variant="h6" align="center" gutterBottom>
+                          Semester: {semester.number}
+                        </Typography>
+                      </Box>
+                    </CardWrapper>
+                  </Box>
+                ))}
+              </Grid>
+            ))}
+        </Grid>
+      )}
+
+      {selectedSemester && (
+        <Grid container spacing={2} ref={scrollRef}>
+          <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Typography variant="h4" gutterBottom>
+              Select Your Branch
+            </Typography>
+          </Grid>
+          {selectedSemester.branches.map((branch, index) => (
+            <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+              <BranchCard branch={branch.name} onClick={handleBranchClick} />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+
+      {selectedBranch && selectedSemester && (
+        <Grid container spacing={1} ref={scrollRef}>
+          <Grid item xs={12} sx={{ mt: 1, textAlign: 'center' }}>
+            <Typography variant="h4" gutterBottom>
+              Select Your Subject
+            </Typography>
+          </Grid>
+          {yearSemData
+            .filter((yearData) => yearData.year === selectedYear)
+            .map((yearData) =>
+              yearData.semesters
+                .filter((semester) => semester.number === selectedSemester.number)
+                .map((semester) =>
+                  semester.branches
+                    .filter((branch) => branch.name === selectedBranch)
+                    .map((branch) => (
+                      <Grid item xs={8} md={12} key={branch.name}>
+                        <SubjectCard subjects={branch.subjects} />
+                      </Grid>
+                    ))
+                )
+            )}
+        </Grid>
       )}
     </>
   );
 };
 
 EarningCard.propTypes = {
-  isLoading: PropTypes.bool
+  yearSemData: PropTypes.arrayOf(
+    PropTypes.shape({
+      year: PropTypes.number.isRequired,
+      semesters: PropTypes.arrayOf(
+        PropTypes.shape({
+          number: PropTypes.number.isRequired,
+          branches: PropTypes.arrayOf(
+            PropTypes.shape({
+              name: PropTypes.string.isRequired,
+              subjects: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string.isRequired)).isRequired,
+            }).isRequired
+          ).isRequired,
+        }).isRequired
+      ).isRequired,
+    }).isRequired
+  ),
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default EarningCard;
