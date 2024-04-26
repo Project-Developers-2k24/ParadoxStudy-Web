@@ -15,6 +15,7 @@ import Footer from '../Footer';
 import { gridSpacing } from 'store/constant';
 import Animationfront from 'components/Animationfront';
 import useTypematerial from 'components/TypeAnimation';
+import { useNavigate } from 'react-router';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -24,10 +25,16 @@ const Dashboard = () => {
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const assignments = ['CollegeNotes', 'Assignments', 'Answers from PrepParadoxBot'];
   const assignment = useTypematerial({ assignments });
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(false);
   }, []);
+  const handleExploreNowClick = () => {
+    // Navigate to the YearSelectionPage
+    navigate('/year-selection');
+  };
+
 
   return (
 
@@ -43,9 +50,6 @@ const Dashboard = () => {
           // width:'85vw'
         }}
       >
-        
-
-
         <Grid item lg={12} md={6} sm={6} xs={12}>
           <Grid container flexDirection="row" alignItems="center" justifyContent="center">
             <Grid item xs={12} md={6} lg={6} sx={{ px: 2 }}>
@@ -66,9 +70,12 @@ const Dashboard = () => {
                 </Typography>
                 <Box sx={{ mt: 2 }}>
                   <AnimateButton>
-                    <Button disableElevation halfWidth size="large" type="submit" variant="contained" color="secondary">
+
+
+                    <Button disableElevation halfWidth size="large" type="submit" variant="contained" color="secondary" onClick={handleExploreNowClick}>
                       Explore Now
                     </Button>
+
                   </AnimateButton>
                 </Box>
               </Box>
@@ -78,13 +85,13 @@ const Dashboard = () => {
 
         {/* background imagesvg */}
         <Grid item xs={12} md={6} lg={6} sx={{ px: 2 }} mt={6}>
-        <div className="custom-shape-divider-bottom-1712342805">
-          <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
-          </svg>
-        </div>
-</Grid>
-        
+          <div className="custom-shape-divider-bottom-1712342805">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+              <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" className="shape-fill"></path>
+            </svg>
+          </div>
+        </Grid>
+
       </Grid>
       {/* footer section */}
       <Grid item lg={12} md={7} sm={6} xs={12}>

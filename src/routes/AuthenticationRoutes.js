@@ -38,6 +38,7 @@ const AuthenticationRoutes = {
       path: '/pages/register/verified/:id',
       element: <Verified />
     }
+    
   ]
 };
 
