@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from '../layout/MainLayout';
 import Loadable from '../ui-component/Loadable';
+import Profile from 'views/profile/Profile';
 import YearSelectionPage from 'views/dashboard/Default/yearSelection';
 import NotesComponent from 'views/dashboard/Default/Notehandle';
 import PDFViewer from 'views/dashboard/Default/PDFViewer';
@@ -32,6 +33,15 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
+      path: 'profile',
+      children: [
+        {
+          path: 'user-profile',
+          element: <Profile />
+        }
+      ]
+    },
+    {
       path: 'dashboard',
       children: [
         {
@@ -54,16 +64,6 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path:'notes-download/:subject',
-      element:<NotesComponent/>
-    },
-    
-    {
-      path:'pdf-viewer',
-      element:<PDFViewer/>
-    },
-    
     {
       path: 'utils',
       children: [
