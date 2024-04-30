@@ -12,11 +12,22 @@ import themes from 'themes';
 // project imports
 import NavigationScroll from './layout/NavigationScroll';
 import { ToastContainer } from 'react-toastify';
+import { gapi } from 'gapi-script';
+import { useEffect } from 'react';
+import { GoogleConfig } from 'views/utilities/Config';
 // ==============================|| APP ||============================== //
 
 const App = () => {
   const customization = useSelector((state) => state.customization);
-
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId: GoogleConfig.clientId,
+        scope: ''
+      });
+    }
+    gapi.load('client:auth2', start);
+  });
   return (
     <StyledEngineProvider injectFirst>
       <ThemeProvider theme={themes(customization)}>

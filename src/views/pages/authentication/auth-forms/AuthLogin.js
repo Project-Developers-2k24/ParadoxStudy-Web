@@ -19,9 +19,9 @@ import {
   OutlinedInput,
   Stack,
   Typography,
-  useMediaQuery
+  // useMediaQuery
 } from '@mui/material';
-
+import { GoogleLogin } from 'react-google-login';
 // third party
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -33,24 +33,33 @@ import AnimateButton from 'ui-component/extended/AnimateButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
-import Google from 'assets/images/icons/social-google.svg';
+// import Google from 'assets/images/icons/social-google.svg';
 import { LOGIN } from 'api/auth';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { GoogleConfig } from 'views/utilities/Config';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
-  const navigate=useNavigate();
-  const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
+  const navigate = useNavigate();
+  // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
 
-  const googleHandler = async () => {
-    console.error('Login');
+  const onSuccess = (response) => {
+    console.log('Login Successful:', response.profileObj);
+    // localStorage.setItem('users', JSON.stringify(response.profileObj));
+    // navigation("/orderDetails");
+    // toast.success("Login Successful: "+ response.profileObj.name)
   };
 
+  const onFailure = (error) => {
+    console.error('Login Failed:', error);
+
+    // toast.error("Login failed. Please try again.");
+  };
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -68,7 +77,7 @@ const FirebaseLogin = ({ ...others }) => {
             <Button
               disableElevation
               fullWidth
-              onClick={googleHandler}
+              // onClick={googleHandler}
               size="large"
               variant="outlined"
               sx={{
@@ -78,9 +87,11 @@ const FirebaseLogin = ({ ...others }) => {
               }}
             >
               <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
+                {/* <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} /> */}
               </Box>
-              Sign in with Google
+              <GoogleLogin clientId={GoogleConfig.clientId} buttonText="Login with Google" onSuccess={onSuccess} onFailure={onFailure} style={{
+                height:"500px"
+              }}/>
             </Button>
           </AnimateButton>
         </Grid>
