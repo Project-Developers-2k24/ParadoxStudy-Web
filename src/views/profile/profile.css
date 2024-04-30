@@ -1,0 +1,59 @@
+.css-1f5r1qv-MuiGrid-root > .MuiGrid-item {
+  padding-top: 150px;
+  /* border: 2px solid red; */
+}
+
+/* .css-1coo3bj-MuiPaper-root-MuiCard-root{
+    width: 80%;
+} */
+
+
+
+
+.css-ohi407 {
+  background: none;
+  
+}
+
+@media (min-width: 900px) {
+    .css-1f5r1qv-MuiGrid-root {
+        padding-left: 56px;
+        padding-right: 56px;
+        /* border: 2px solid red; */
+        width: 82%;
+      }
+
+}
+@media (max-width: 900px) {
+    .css-1f5r1qv-MuiGrid-root {
+        padding-left: 56px;
+        padding-right: 56px;
+        width: 82%;
+      }
+
+}
+
+@media (max-width: 413px) {
+    .css-1ewlecp-MuiGrid-root {
+        width: 100%;
+        /* border: 2px solid green; */
+
+    }
+    
+    .css-1coo3bj-MuiPaper-root-MuiCard-root{
+        width: 100%;
+        /* border: 2px solid red; */
+    }
+
+    .profileContainer{
+        text-align: center;
+        /* border: 2px solid red; */
+        padding: 0%;
+        margin-left: 1px;
+    }
+
+    
+
+    
+    
+  }
