@@ -1,4 +1,3 @@
-
 // import { v4 as uuidv4 } from 'uuid';
 // // import uuid from 'uuid';
 // import Grid from "@mui/material/Grid";
@@ -12,7 +11,7 @@
 // import Tabs from "@mui/material/Tabs";
 // import Tab from "@mui/material/Tab";
 // import CustomInput from "./CustomInput";
-// import CardContent from "@mui/material/CardContent"; 
+// import CardContent from "@mui/material/CardContent";
 // import InputAdornment from "@mui/material/InputAdornment";
 // import MenuItem from "@mui/material/MenuItem";
 // import IconButton from "@mui/material/IconButton";
@@ -347,54 +346,82 @@
 
 // export default Profile
 
-
-import React, { useState } from "react";
-import Grid from "@mui/material/Grid";
-import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import ProfileCard from "./ProfileCard";
-import SettingsCard from "./SettingsCard";
-import "./profile.css";
-
+import React, { useEffect, useState } from 'react';
+import Grid from '@mui/material/Grid';
+import CssBaseline from '@mui/material/CssBaseline';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import ProfileCard from './ProfileCard';
+import SettingsCard from './SettingsCard';
+import './profile.css';
+import { USERBYID } from 'api/auth';
+import axios from 'axios';
 
 // STYLE & THEME
 const theme = createTheme();
 
 // APP
 export default function Profile() {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
+  const [token, setToken] = useState('');
+  const [data, setData] = useState([]);
 
+  const getUser = async () => {
+    const token = localStorage.getItem('token');
+    setToken(token);
+    try {
+      const res = await axios.get(USERBYID, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      // Check the status code
+      if (res.status === 200) {
+        console.log('Success! User data retrieved:', res.data);
+        setData(res.data);
+      } else {
+        console.log('Error:', res.status);
+        // Handle other status codes if needed
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
   const mainUser = {
     // DEFAULT VALUES
-    title: "CEO of Apple",
+    title: 'CEO of Apple',
     dt1: 32,
     dt2: 40,
     dt3: 50,
     firstName: { text },
-    lastName: "Doe",
-    midName: "Baker",
-    gender: "female",
-    phone: "932-555-4247",
-    email: "janedoe@gmail.com",
-    pass: "password123"
+    lastName: 'Doe',
+    midName: 'Baker',
+    gender: 'female',
+    phone: '932-555-4247',
+    email: 'janedoe@gmail.com',
+    pass: 'password123'
   };
 
-  const fullName = `${mainUser.firstName} ${mainUser.lastName}`;
+  // const fullName = `${mainUser.firstName} ${mainUser.lastName}`;
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline>
         {/* BACKGROUND */}
-        <Grid container direction="column" sx={{ overflowX: "hidden" }} >
-          <Grid item xs={12} md={6} sm={5} >
+        <Grid container direction="column" sx={{ overflowX: 'hidden' }}>
+          <Grid item xs={12} md={6} sm={5}>
             <img
               alt="avatar"
               style={{
-                width: "100vw",
-                height: "35vh",
-                objectFit: "cover",
-                objectPosition: "50% 50%",
-                position: "relative"
+                width: '100vw',
+                height: '35vh',
+                objectFit: 'cover',
+                objectPosition: '50% 50%',
+                position: 'relative'
               }}
               className="cloud"
               src="https://iris2.gettimely.com/images/default-cover-image.jpg"
@@ -404,38 +431,46 @@ export default function Profile() {
           {/* COMPONENTS */}
           <Grid
             container
-            direction={{ xs: "column", md: "row" }}
+            direction={{ xs: 'column', md: 'row' }}
             spacing={3}
             sx={{
-              position: "absolute",
-              top: "20vh",
+              position: 'absolute',
+              top: '20vh',
               px: { xs: 0, md: 7 }
             }}
             className="profileContainer"
           >
             {/* PROFILE CARD */}
-            <Grid item md={3} >
-              <ProfileCard
-                name={fullName}
-                sub={mainUser.title}
-                dt1={mainUser.dt1}
-                dt2={mainUser.dt2}
-                dt3={mainUser.dt3}
-              ></ProfileCard>
+
+            <Grid item md={3}>
+              {data && data.data && (
+                <ProfileCard
+                  name={data.data.username}
+                  sub={data.data.username}
+                  dt1={mainUser.dt1}
+                  dt2={mainUser.dt2}
+                  dt3={mainUser.dt3}
+                  avatar={data.data.avatar}
+                />
+              )}
             </Grid>
 
             {/* SETTINGS CARD */}
-            <Grid item md={9} >
-              <SettingsCard
-                expose={(v) => setText(v)}
-                firstName={mainUser.firstName}
-                lastName={mainUser.lastName}
-                midName={mainUser.midName}
-                phone={mainUser.phone}
-                email={mainUser.email}
-                pass={mainUser.pass}
-                gender={mainUser.gender}
-              ></SettingsCard>
+            <Grid item md={9}>
+              {data && data.data && (
+                <SettingsCard
+                  username={data.data.username}
+                  phone={data.data.phone}
+                  avatar={data.data.avatar}
+                  institution={data.data.institution}
+                  email={data.data.email}
+                  sem={data.data.sem}
+                  year={data.data.year}
+                  country={data.data.country}
+                  gender={data.data.gender}
+                  branch={data.data.branch}
+                ></SettingsCard>
+              )}
             </Grid>
           </Grid>
         </Grid>
