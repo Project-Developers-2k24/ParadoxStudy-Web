@@ -7,7 +7,7 @@ import Profile from 'views/profile/Profile';
 import YearSelectionPage from 'views/dashboard/Default/yearSelection';
 import NotesComponent from 'views/dashboard/Default/Notehandle';
 import PDFViewer from 'views/dashboard/Default/PDFViewer';
-
+import ProtectedRoute from './ProtectedRoute';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
@@ -24,6 +24,8 @@ const SamplePage = Loadable(lazy(() => import('views/sample-page')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
+const token = localStorage.getItem('token');
+const isAuthorized = !!token;
 const MainRoutes = {
   path: '/',
   element: <MainLayout />,
@@ -37,7 +39,11 @@ const MainRoutes = {
       children: [
         {
           path: 'user-profile',
-          element: <Profile />
+          element: (
+            <ProtectedRoute isAuthorized={isAuthorized}>
+              <Profile />
+            </ProtectedRoute>
+          )
         }
       ]
     },
@@ -47,13 +53,12 @@ const MainRoutes = {
         {
           path: 'default',
           element: <DashboardDefault />
-        },
-       
+        }
       ]
     },
     {
-      path:'year-selection',
-      element:<YearSelectionPage/>
+      path: 'year-selection',
+      element: <YearSelectionPage />
     },
     {
       path: 'year-select',

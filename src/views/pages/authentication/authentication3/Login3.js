@@ -23,7 +23,7 @@ const Login = () => {
         container
         justifyContent="center"
         alignItems="stretch"
-        sx={{ bgcolor: 'background.paper', padding: 0, maxWidth: '100%', height: '100vh',  }}
+        sx={{ bgcolor: 'background.paper', padding: 0, maxWidth: '100%', height: '100vh' }}
       >
         {/* first grid */}
         {!matchDownSM && (
@@ -66,8 +66,8 @@ const Login = () => {
                       </Grid>
                       <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
                         <Grid item>
-                          <Stack alignItems="center" justifyContent="center" >
-                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}  >
+                          <Stack alignItems="center" justifyContent="center">
+                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                               Hi, Welcome Back
                             </Typography>
                             <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>
