@@ -8,6 +8,18 @@
 } */
 
 
+.css-cq3499{
+  width:80%;
+  margin-top: 80px;
+  margin-left: 25px;
+}
+
+.css-cq3499 > .MuiGrid-item{
+  margin-bottom: 20px;
+}
+
+
+
 
 
 .css-ohi407 {
@@ -31,6 +43,10 @@
         width: 82%;
       }
 
+      .profileContainer{
+        padding-right: 56px;
+      }
+
 }
 
 @media (max-width: 413px) {
@@ -50,10 +66,6 @@
         /* border: 2px solid red; */
         padding: 0%;
         margin-left: 1px;
-    }
-
-    
-
-    
-    
+        margin-top:100px;
+    } 
   }
