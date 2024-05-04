@@ -98,6 +98,13 @@
     margin-left: -20px;
   }
 
+  @media (max-width: 750px) {
+    .css-d7jli7 {
+        width: 110%;
+        margin-left: -20px;
+    }
+}
+
   .css-uh1pua {
     // padding: 48px;
     // border: 2px solid green;
@@ -113,6 +120,11 @@
     // border: 2px solid red;
     margin-bottom: 160px;
   }
+
+  .css-u3f9ef {
+    width: 60vw;
+    margin-bottom: 160px;
+}
 }
 
 
@@ -288,4 +300,15 @@ blinkingCursor{
   50%{
     opacity: 0;
   }
+}
+
+
+
+//dashboard deployment
+.css-d7jli7{
+  border-radius: inherit;
+}
+
+.css-d7jli7{
+  margin-left: -20px;
 }
