@@ -16,9 +16,8 @@ import { gridSpacing } from 'store/constant';
 import Animationfront from 'components/Animationfront';
 import useTypematerial from 'components/TypeAnimation';
 import { useNavigate } from 'react-router';
-
+import './Style.css';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
-
 const Dashboard = () => {
   const theme = useTheme();
   const [isLoading, setLoading] = useState(true);
@@ -44,8 +43,9 @@ const Dashboard = () => {
           position: 'relative',
           background: `url(${bgimage}) no-repeat center center fixed`,
           backgroundSize: 'cover',
-          minHeight: '100vh'
+          minHeight: '100vh',
           // width:'85vw'
+          borderRadius:"50px"
         }}
       >
         <Grid item lg={12} md={6} sm={6} xs={12}>

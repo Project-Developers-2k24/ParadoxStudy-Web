@@ -172,10 +172,10 @@ export default function SettingsCard(props) {
           Authorization: `Bearer ${token}`
         }
       });
-     toast.success("update succesfully")
+      toast.success('update succesfully');
       console.log(res.data);
     } catch (error) {
-      toast.success("error in update profile succesfully")
+      toast.success('error in update profile succesfully');
       console.error(error);
     }
   };

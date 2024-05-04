@@ -6,7 +6,7 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from '../auth-forms/AuthLogin';
 //assets
 import { image, logo } from '../../../../assets/images/index';
-
+import '../../../../assets/css/Style.css';
 // Styled component for curved boundary
 const CurvedGrid = styled(Grid)(({ theme }) => ({
   borderRadius: theme.spacing(0),
