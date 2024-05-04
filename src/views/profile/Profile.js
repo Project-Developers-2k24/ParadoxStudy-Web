@@ -412,8 +412,8 @@ export default function Profile() {
     <ThemeProvider theme={theme}>
       <CssBaseline>
         {/* BACKGROUND */}
-        <Grid container direction="column" sx={{ overflowX: 'hidden' }}>
-          <Grid item xs={12} md={6} sm={5}>
+        <Grid container direction="column" sx={{ overflowX: "hidden" }} className="profile_container">
+          <Grid item xs={12} md={6} sm={5} >
             <img
               alt="avatar"
               style={{
