@@ -60,6 +60,11 @@
       "react-app"
     ]
   },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  },
   "browserslist": {
     "production": [
       ">0.2%",
