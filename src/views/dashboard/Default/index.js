@@ -32,10 +32,9 @@ const Dashboard = () => {
   }, []);
   const handleExploreNowClick = () => {
     // Navigate to the YearSelectionPage
-    navigate('/year-selection');
+    navigate('/year');
   };
-
-
+  
   return (
 
     <>

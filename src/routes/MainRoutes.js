@@ -3,9 +3,15 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from '../layout/MainLayout';
 import Loadable from '../ui-component/Loadable';
-import YearSelectionPage from 'views/dashboard/Default/yearSelection';
-import NotesComponent from 'views/dashboard/Default/Notehandle';
-import PDFViewer from 'views/dashboard/Default/PDFViewer';
+//import YearSelectionPage from 'views/dashboard/Default/yearSelection';
+import PassportPDFViewer from 'views/dashboard/Default/PDFViewer';
+
+import Year from 'views/dashboard/Default/Year';
+import Semester from 'views/dashboard/Default/Semester';
+import Branch from 'views/dashboard/Default/Branch';
+import Subject from 'views/dashboard/Default/Subjects';
+import ChatBot from 'views/dashboard/Default/PrepParadoxBot';
+import Data from 'views/dashboard/Default/PdfData';
 
 
 // dashboard routing
@@ -42,28 +48,33 @@ const MainRoutes = {
       ]
     },
     {
-      path:'year-selection',
-      element:<YearSelectionPage/>
+      path:'year',
+      element:<Year/>
+    },  
+    {
+      path:'year/:year',
+      element:<Semester/>
     },
     {
-      path: 'year-select',
-      children: [
-        {
-          path: 'year-selection',
-          element: <YearSelectionPage />
-        }
-      ]
+      path:'year/:year/semester/:semester',
+      element:<Branch/>
     },
     {
-      path:'notes-download/:subject',
-      element:<NotesComponent/>
+      path:'year/:year/semester/:semester/branch/:branch',
+      element:<Subject/>
     },
-    
     {
-      path:'pdf-viewer',
-      element:<PDFViewer/>
+      path:'year/:year/semester/:semester/branch/:branch/subject/:subject',
+      element:<Data/>
     },
-    
+    {
+      path:'pdf',
+      element:<PassportPDFViewer/>
+    },   
+    {
+      path:'chatbot',
+      element:<ChatBot/>
+    },
     {
       path: 'utils',
       children: [
