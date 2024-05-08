@@ -7,35 +7,35 @@ export const yearSemData = [
           branches: [
             {
               name: 'CS',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
             {
               name: 'CS(AI)',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
             {
               name: 'CS(DS)',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
             {
               name: 'IT',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
             {
               name: 'ECE',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
             {
               name: 'ME',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
             {
               name: 'EE',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
             {
               name: 'CE',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
           ],
         },
@@ -44,36 +44,36 @@ export const yearSemData = [
           branches: [
             {
               name: 'CS',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
             {
               name: 'CS(AI)',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
             {
               name: 'CS(DS)',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
             {
               name: 'IT',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
 
             {
               name: 'ECE',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
             {
               name: 'ME',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
             {
               name: 'EE',
-              subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+              subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
             },
             {
               name: 'CE',
-              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+              subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
             },
           ],
         },
@@ -166,19 +166,19 @@ export const yearSemData = [
             branches: [
               {
                 name: 'CS',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'CS(AI)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CS(DS)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'IT',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'ECE',
@@ -186,15 +186,15 @@ export const yearSemData = [
               },
               {
                 name: 'ME',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'EE',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CE',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
             ],
           },
@@ -203,35 +203,35 @@ export const yearSemData = [
             branches: [
               {
                 name: 'CS',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'CS(AI)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CS(DS)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'IT',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'ECE',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'ME',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'EE',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CE',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
             ],
           },
@@ -245,35 +245,35 @@ export const yearSemData = [
             branches: [
               {
                 name: 'CS',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'CS(AI)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CS(DS)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'IT',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'ECE',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'ME',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'EE',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CE',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
             ],
           },
@@ -282,35 +282,35 @@ export const yearSemData = [
             branches: [
               {
                 name: 'CS',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'CS(AI)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CS(DS)',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'IT',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'ECE',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'ME',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
               {
                 name: 'EE',
-                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','Human Value'],
+                subjects: ['Maths', 'Chemistry', 'Civil','Mechanical','HV'],
               },
               {
                 name: 'CE',
-                subjects: ['Physics', 'Maths', 'Communication Skills','PPS','BEE'],
+                subjects: ['Physics', 'Maths', 'Comm.Skills','PPS','BEE'],
               },
             ],
           },
