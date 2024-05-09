@@ -6,7 +6,7 @@ import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from '../auth-forms/AuthLogin';
 //assets
 import { image, logo } from '../../../../assets/images/index';
-
+import '../../../../assets/css/Style.css';
 // Styled component for curved boundary
 const CurvedGrid = styled(Grid)(({ theme }) => ({
   borderRadius: theme.spacing(0),
@@ -23,7 +23,7 @@ const Login = () => {
         container
         justifyContent="center"
         alignItems="stretch"
-        sx={{ bgcolor: 'background.paper', padding: 0, maxWidth: '100%', height: '100vh',  }}
+        sx={{ bgcolor: 'background.paper', padding: 0, maxWidth: '100%', height: '100vh' }}
       >
         {/* first grid */}
         {!matchDownSM && (
@@ -60,14 +60,14 @@ const Login = () => {
                       <Grid item xs={12}>
                         <Grid container direction="row" justifyContent="center" alignItems="center">
                           <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <img src={logo} alt="logoimage" width="300" />
+                            <img src={logo} alt="logoimage" width="200" />
                           </Grid>
                         </Grid>
                       </Grid>
                       <Grid container direction={matchDownSM ? 'column-reverse' : 'row'} alignItems="center" justifyContent="center">
                         <Grid item>
-                          <Stack alignItems="center" justifyContent="center" >
-                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}  >
+                          <Stack alignItems="center" justifyContent="center">
+                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                               Hi, Welcome Back
                             </Typography>
                             <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>

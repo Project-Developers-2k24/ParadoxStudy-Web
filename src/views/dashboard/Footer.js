@@ -36,7 +36,6 @@
 
 
 
-
 import * as React from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -50,10 +49,7 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        backgroundColor: (theme) =>
-          theme.palette.mode === "light"
-            ? theme.palette.grey[200]
-            : theme.palette.grey[800],
+        backgroundColor: '#ffffff', // Set background color to white
         p: 6,
       }}
     >
@@ -115,3 +111,7 @@ export default function Footer() {
     </Box>
   );
 }
+
+
+
+

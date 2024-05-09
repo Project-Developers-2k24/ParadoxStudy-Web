@@ -38,10 +38,41 @@ import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
+import axios from 'axios';
+import { USERBYID } from 'api/auth';
 
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
+  const [token, setToken] = useState('');
+  const [data, setData] = useState([]);
+
+  const getUser = async () => {
+    const token = localStorage.getItem('token');
+    setToken(token);
+    try {
+      const res = await axios.get(USERBYID, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      // Check the status code
+      if (res.status === 200) {
+        console.log('Success! User data retrieved:', res.data);
+        setData(res.data);
+      } else {
+        console.log('Error:', res.status);
+        // Handle other status codes if needed
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    getUser();
+  }, []);
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
@@ -56,7 +87,9 @@ const ProfileSection = () => {
    * */
   const anchorRef = useRef(null);
   const handleLogout = async () => {
-    console.log('Logout');
+    localStorage.removeItem("token")
+    window.location.href = '/pages/login/login3';
+
   };
 
   const handleClose = (event) => {
@@ -86,7 +119,17 @@ const ProfileSection = () => {
 
     prevOpen.current = open;
   }, [open]);
+  const currentTime = new Date();
+  const currentHour = currentTime.getHours();
+  let greeting;
 
+  if (currentHour < 12) {
+    greeting = 'Good Morning,';
+  } else if (currentHour >= 12 && currentHour < 18) {
+    greeting = 'Good Afternoon,';
+  } else {
+    greeting = 'Good Evening,';
+  }
   return (
     <>
       <Chip
@@ -110,18 +153,20 @@ const ProfileSection = () => {
           }
         }}
         icon={
-          <Avatar
-            src={User1}
-            sx={{
-              ...theme.typography.mediumAvatar,
-              margin: '8px 0 8px 8px !important',
-              cursor: 'pointer'
-            }}
-            ref={anchorRef}
-            aria-controls={open ? 'menu-list-grow' : undefined}
-            aria-haspopup="true"
-            color="inherit"
-          />
+          data.data && (
+            <Avatar
+              src={data.data.avatar}
+              sx={{
+                ...theme.typography.mediumAvatar,
+                margin: '8px 0 8px 8px !important',
+                cursor: 'pointer'
+              }}
+              ref={anchorRef}
+              aria-controls={open ? 'menu-list-grow' : undefined}
+              aria-haspopup="true"
+              color="inherit"
+            />
+          )
         }
         label={<IconSettings stroke={1.5} size="1.5rem" color={theme.palette.primary.main} />}
         variant="outlined"
@@ -157,9 +202,9 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
+                        <Typography variant="h4">{greeting}</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                          {data.data.username}
                         </Typography>
                       </Stack>
                       <Typography variant="subtitle2">Project Admin</Typography>
