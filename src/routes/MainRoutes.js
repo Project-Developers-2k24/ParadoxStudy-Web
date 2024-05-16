@@ -3,13 +3,11 @@ import { lazy } from 'react';
 // project imports
 import MainLayout from '../layout/MainLayout';
 import Loadable from '../ui-component/Loadable';
-<<<<<<< HEAD
 import Profile from 'views/profile/Profile';
-import YearSelectionPage from 'views/dashboard/Default/yearSelection';
-import NotesComponent from 'views/dashboard/Default/Notehandle';
+// import YearSelectionPage from 'views/dashboard/Default/yearSelection';
+// import NotesComponent from 'views/dashboard/Default/Notehandle';
 import PDFViewer from 'views/dashboard/Default/PDFViewer';
 import ProtectedRoute from './ProtectedRoute';
-=======
 //import YearSelectionPage from 'views/dashboard/Default/yearSelection';
 import PassportPDFViewer from 'views/dashboard/Default/PDFViewer';
 
@@ -19,8 +17,6 @@ import Branch from 'views/dashboard/Default/Branch';
 import Subject from 'views/dashboard/Default/Subjects';
 import ChatBot from 'views/dashboard/Default/PrepParadoxBot';
 import Data from 'views/dashboard/Default/PdfData';
-
->>>>>>> 16c068ae1a1895058ea1a0a2f0a80fe6a067b786
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
@@ -70,42 +66,63 @@ const MainRoutes = {
       ]
     },
     {
-<<<<<<< HEAD
-      path: 'year-selection',
-      element: <YearSelectionPage />
-=======
-      path:'year',
-      element:<Year/>
-    },  
-    {
-      path:'year/:year',
-      element:<Semester/>
->>>>>>> 16c068ae1a1895058ea1a0a2f0a80fe6a067b786
+      path: 'year',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Year />
+        </ProtectedRoute>
+      )
     },
     {
-      path:'year/:year/semester/:semester',
-      element:<Branch/>
+      path: 'year/:year',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Semester />
+        </ProtectedRoute>
+      )
     },
     {
-<<<<<<< HEAD
-=======
-      path:'year/:year/semester/:semester/branch/:branch',
-      element:<Subject/>
+      path: 'year/:year/semester/:semester',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          {' '}
+          <Branch />
+        </ProtectedRoute>
+      )
     },
     {
-      path:'year/:year/semester/:semester/branch/:branch/subject/:subject',
-      element:<Data/>
+      path: 'year/:year/semester/:semester/branch/:branch',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Subject />
+        </ProtectedRoute>
+      )
     },
     {
-      path:'pdf',
-      element:<PassportPDFViewer/>
-    },   
-    {
-      path:'chatbot',
-      element:<ChatBot/>
+      path: 'year/:year/semester/:semester/branch/:branch/subject/:subject',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Data />
+        </ProtectedRoute>
+      )
     },
     {
->>>>>>> 16c068ae1a1895058ea1a0a2f0a80fe6a067b786
+      path: 'pdf',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <PassportPDFViewer />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: 'chatbot',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <ChatBot />
+        </ProtectedRoute>
+      )
+    },
+    {
       path: 'utils',
       children: [
         {

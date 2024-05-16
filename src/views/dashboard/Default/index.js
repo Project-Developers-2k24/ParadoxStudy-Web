@@ -33,11 +33,8 @@ const Dashboard = () => {
     // Navigate to the YearSelectionPage
     navigate('/year');
   };
-<<<<<<< HEAD
 
-=======
   
->>>>>>> 16c068ae1a1895058ea1a0a2f0a80fe6a067b786
   return (
     <>
       <Grid
