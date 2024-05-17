@@ -85,7 +85,7 @@ const ChatBot = () => {
       formData.append('question', message);
       formData.append('selected_book', pdfData.docs_name);
       formData.append('chatId', pdfData.userId);
-      const res = await axios.post('http://20.42.96.57:8000/ask', formData);
+      const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/ask', formData);
       console.log(res.data);
 
       // Simulate typing delay before showing bot's response
@@ -126,7 +126,7 @@ const ChatBot = () => {
       formData.append('selected_book', pdfData.docs_name);
       formData.append('chatId', pdfData.userId);
 
-      const res = await axios.post('http://20.42.96.57:8000/getChats', formData);
+      const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getChats', formData);
       console.log(res.data);
       setChat(res.data.chats); // Assuming the chat data is returned in a property called "chats"
     } catch (error) {
