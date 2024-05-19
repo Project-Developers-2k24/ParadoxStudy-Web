@@ -24,7 +24,11 @@ import {
   CardContent,
   CircularProgress
 } from '@mui/material';
-
+import { useMediaQuery } from '@mui/material';
+import lottieJson from '../../../utils/Animation - 1716087479028.json';
+import Lottie from 'react-lottie-player';
+import Skeleton from '@mui/material/Skeleton';
+import parse from 'html-react-parser';
 import SendIcon from '@mui/icons-material/Send';
 import FolderIcon from '@mui/icons-material/Folder';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -44,11 +48,13 @@ const ChatBot = () => {
   const [isBotTyping, setIsBotTyping] = useState(false); // State to track if the bot is typing
   const [token, setToken] = useState('');
   const [data, setData] = useState([]);
-
+  const [userDataLoading, setUserDataLoading] = useState(false);
+  const isSmallScreen = useMediaQuery('(max-width:786px)');
   const getUser = async () => {
     const token = localStorage.getItem('token');
     setToken(token);
     try {
+      setUserDataLoading(true);
       const res = await axios.get(USERBYID, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -57,6 +63,7 @@ const ChatBot = () => {
 
       // Check the status code
       if (res.status === 200) {
+        setUserDataLoading(false);
         console.log('Success! User data retrieved:', res.data);
         setData(res.data);
       } else {
@@ -99,7 +106,7 @@ const ChatBot = () => {
         if (Array.isArray(res.data.answer) && res.data.answer.length > 0) {
           formattedResponse = res.data.answer.map((text) => ({
             page: text.metadata.page,
-            content: text.page_content
+            content: parse(text.page_content)
           }));
         } else {
           formattedResponse = [
@@ -157,8 +164,8 @@ const ChatBot = () => {
               return {
                 user: 'Maruti',
                 content: Array.isArray(chatItem.text)
-                  ? chatItem.text.map((text) => ({ page: text.metadata.page, content: text.page_content }))
-                  : [{ page: chatItem.text.metadata.page, content: chatItem.text.page_content }]
+                  ? chatItem.text.map((text) => ({ page: text.metadata.page, content: parse(text.page_content) }))
+                  : [{ page: chatItem.text.metadata.page, content: parse(chatItem.text.page_content) }]
               };
             }
           } else {
@@ -223,10 +230,14 @@ const ChatBot = () => {
   };
 
   return (
-    <div style={{ position: 'relative', backgroundColor: 'white', minHeight: '100vh', borderRadius: '10px' }}>
-      <AppBar position="static" color="primary" sx={{ borderRadius: '10px', height: '50px' }}>
+    <div style={{ position: 'relative', backgroundColor: 'white', minHeight: '100vh', borderRadius: '10px', padding: '10px' }}>
+      <AppBar position="static" color="primary" sx={{ borderRadius: '10px', height: '50px', marginBottom: '10px' }}>
         <Stack direction="row" alignItems="center">
-          <Avatar alt="Maruti" src={chatbot} sx={{ ml: '2px' }} />
+          {userDataLoading ? (
+            <Skeleton variant="cirlce" width={20} height={40} />
+          ) : (
+            <Avatar alt="Maruti" src={chatbot} sx={{ ml: '2px' }} />
+          )}
           <Typography variant="h4" noWrap component="div" color="white" sx={{ p: 2 }}>
             MARUTI :
           </Typography>
@@ -238,12 +249,8 @@ const ChatBot = () => {
       <IconButton onClick={() => setOpen(!open)} sx={{ mt: 2, position: 'absolute', left: '0' }}>
         <KeyboardArrowRightIcon />
       </IconButton>
-      <Grid
-        container
-        spacing={1}
-        sx={{ maxHeight: 'calc(100vh-64px)', marginTop: '20px', marginLeft: open ? '80px' : 'auto', marginBottom: '100px' }}
-      >
-        <Grid item xs={2}>
+      <Grid container spacing={1} sx={{ marginTop: '20px', marginBottom: '100px', flexDirection: 'row', justifyContent: 'center' }}>
+        {/* <Grid item xs={12} sm={open ? 3 : 2} md={2}>
           <Paper style={{ height: '100vh', overflowY: 'auto', display: open ? 'block' : 'none' }}>
             <Collapse in={open}>
               <input accept=".pdf" id="upload-file" multiple type="file" style={{ display: 'none' }} onChange={handleFileUpload} />
@@ -282,17 +289,38 @@ const ChatBot = () => {
               )}
             </Collapse>
           </Paper>
-        </Grid>
-        <Grid item xs={8} sx={{ color: 'white' }}>
-          <Paper style={{ height: '100%', overflowY: 'auto', color: 'white', borderRadius: '5px', backgroundColor: 'white' }}>
+        </Grid> */}
+        <Grid item xs={12} sm={open ? 9 : 10}>
+          <Paper style={{ height: '100%', overflowY: 'auto', borderRadius: '5px', backgroundColor: 'white' }}>
             <List dense>
               {messageHistory.map((message, index) => (
                 <React.Fragment key={index}>
-                  <ListItem sx={{ borderRadius: '10px' }}>
+                  <ListItem sx={{ borderRadius: '10px', flexDirection: isSmallScreen ? 'column' : 'row' }}>
                     {/* Display Maruti's avatar if the message is from Maruti */}
-                    {message.user === 'Maruti' && (
+                    {message.user === 'Maruti' && !isSmallScreen && (
                       <ListItemAvatar>
-                        <Avatar alt="Maruti" src={chatbot} />
+                        <Avatar
+                          alt="Maruti"
+                          src={chatbot}
+                          style={{
+                            height: '40px',
+                            width: '40px'
+                          }}
+                        />
+                      </ListItemAvatar>
+                    )}
+                    {message.user === 'Maruti' && isSmallScreen && (
+                      <ListItemAvatar>
+                        <Avatar
+                          alt="Maruti"
+                          src={chatbot}
+                          style={{
+                            height: '35px',
+                            width: '35px',
+                            justifyContent: 'flex-start',
+                            marginLeft: '-200%'
+                          }}
+                        />
                       </ListItemAvatar>
                     )}
                     {/* Render message content */}
@@ -305,8 +333,11 @@ const ChatBot = () => {
                               key={textIndex}
                               sx={{
                                 backgroundColor: message.user === 'You' ? 'lightgrey' : 'lightgrey',
-                                marginBottom: 1, // Adjust margin for spacing between cards
-                                borderRadius: '10px'
+                                marginBottom: 4, // Adjust margin for spacing between cards
+                                borderRadius: '10px',
+                               
+                                // marginLeft:"10%"
+                                
                               }}
                             >
                               <CardContent>
@@ -314,28 +345,29 @@ const ChatBot = () => {
                                 <Typography variant="subtitle2" color="textSecondary" gutterBottom>
                                   Page {textItem.page}
                                 </Typography>
-                                <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-                                  {textItem.content}
-                                </Typography>
+                                <Typography variant="body1">{textItem.content}</Typography>
                               </CardContent>
                             </Card>
                           ))
                         ) : (
-                          <Card
-                            sx={{
-                              backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
-                              marginBottom: 1, // Adjust margin for spacing between cards
-                              borderRadius: '10px',
-                              maxWidth: '50%',
-                              marginLeft: message.user === 'You' ? '50%' : '0%'
-                            }}
-                          >
-                            <CardContent>
-                              <Typography variant="h4" sx={{ whiteSpace: 'pre-wrap', color: 'white' }}>
-                                {message.content}
-                              </Typography>
-                            </CardContent>
-                          </Card>
+                          <>
+                            <Card
+                              sx={{
+                                backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
+                                marginBottom: 1.5, // Adjust margin for spacing between cards
+                                borderRadius: '10px',
+                                maxWidth: message.user === 'You' ? '50%' : '70%',
+                                marginLeft: message.user === 'You' ? '50%' : '10%'
+                                // marginRight: message.user === 'You' ? '0%' : '20%'
+                              }}
+                            >
+                              <CardContent>
+                                <Typography variant={isSmallScreen ? 'h6' : 'h4'} sx={{ color: 'white' }}>
+                                  {message.content}
+                                </Typography>
+                              </CardContent>
+                            </Card>
+                          </>
                           // If content is not an array, render it as a Typography component
                         )
                       }
@@ -350,17 +382,24 @@ const ChatBot = () => {
                                   justifyContent: 'center'
                                 }}
                               >
-                                {data ? (
+                                {userDataLoading ? (
+                                  <Skeleton variant="cirlce" width={20} height={40} />
+                                ) : (
                                   <Avatar
                                     sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '10px' }}
                                     src={data.data.avatar ? data.data.avatar : null}
-                                  >
+                                  />
+                                )}
+
+                                {userDataLoading ? (
+                                  <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
+                                    <Skeleton variant="text" />
+                                  </Typography>
+                                ) : (
+                                  <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
                                     {data.data.username}
-                                  </Avatar>
-                                ) : null}
-                                <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
-                                  {data.data.username}
-                                </Typography>
+                                  </Typography>
+                                )}
                               </div>
                             </ListItemAvatar>
                           </Stack>
@@ -385,24 +424,27 @@ const ChatBot = () => {
             </List>
 
             {isLoading && ( // Show loading indicator when isLoading is true
-              <div>Loading...</div>
+              <Lottie loop animationData={lottieJson} play style={{ width: 150, height: 150 }} />
             )}
           </Paper>
+
           <Stack
             direction="row"
             alignItems="center"
-            spacing={1}
+            justifyContent="center"
+            position="fixed" // Fixed position
+            bottom={0} // Stick to the bottom
+            width={isSmallScreen ? '83%' : '69%'} // Full width
+            marginRight={20}
+            zIndex={999} // Ensure it's above other content
+            backgroundColor="white"
+            borderRadius={10}
+            padding={2} // Add padding for better spacing
             sx={{
-              width: { xs: 'calc(100% - 450px)', md: 'calc(100% - 590px)' },
-              mt: 6,
-              mb: 1,
-              px: 2,
-              justifyContent: 'flex-end',
-              position: 'fixed',
-              bottom: 0, // Stick to the bottom
-              zIndex: 999, // Ensure it's above other content
-              backgroundColor: 'white',
-              borderRadius: '10px'
+              '@media (max-width: 600px)': {
+                // Adjust stack direction for small screens
+                flexDirection: 'column'
+              }
             }}
           >
             <TextField
@@ -421,7 +463,6 @@ const ChatBot = () => {
                   <InputAdornment position="end">
                     <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
                       {isLoading ? <CircularProgress /> : <SendIcon />}
-                      {/* <SendIcon /> */}
                     </IconButton>
                   </InputAdornment>
                 )

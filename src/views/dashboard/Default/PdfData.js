@@ -3,10 +3,12 @@ import PassportPDFViewer from './PDFViewer'; // Assuming the component file is n
 import { useParams } from 'react-router';
 import { Typography, Grid } from '@mui/material'; // Import Grid component from Material-UI
 import axios from 'axios';
+import Skeleton from '@mui/material/Skeleton';
 
 const Data = () => {
   const { year, branch, subject } = useParams();
   const [pdfFiles, setPdfFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getPdfData = async () => {
     try {
@@ -15,9 +17,10 @@ const Data = () => {
 
       const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
       setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
-      console.log(res.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -32,11 +35,17 @@ const Data = () => {
       </Typography>
       {/* Wrap PassportPDFViewer components in a Grid container */}
       <Grid container spacing={2}>
-        {pdfFiles.map((pdf, index) => (
-          <Grid key={index} item xs={12} sm={6} md={3}>
-            <PassportPDFViewer pdfData={pdf} />
-          </Grid>
-        ))}
+        {loading
+          ? Array.from(new Array(8)).map((_, index) => (
+              <Grid key={index} item xs={12} sm={6} md={3}>
+                <Skeleton variant="rounded" width="100%" height={200} />
+              </Grid>
+            ))
+          : pdfFiles.map((pdf, index) => (
+              <Grid key={index} item xs={12} sm={6} md={3}>
+                <PassportPDFViewer pdfData={pdf} />
+              </Grid>
+            ))}
       </Grid>
     </div>
   );
