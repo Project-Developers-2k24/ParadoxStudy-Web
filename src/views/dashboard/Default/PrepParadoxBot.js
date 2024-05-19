@@ -34,7 +34,7 @@ const ChatBot = () => {
     { user: 'You', content: 'Hi, I want to know about Book 1.' },
     { user: 'Maruti', content: 'Sure, what do you want to know about Book 1?' },
   ]);
- 
+
   const messageInputRef = useRef(null);
   const [selectedBook, setSelectedBook] = useState('');
   const [open, setOpen] = useState(false);
@@ -90,13 +90,13 @@ const ChatBot = () => {
                 Upload the Book
               </Typography>
               <Stack direction="row" alignItems="center">
-              <label htmlFor="upload-file">
-                <Button variant="contained" component="span" sx={{ mt: 2 }}>
-                  <Avatar sx={{ marginRight: '8px' }}>
-                    <FolderIcon />
-                  </Avatar>
-                  Browse File
-                </Button>
+                <label htmlFor="upload-file">
+                  <Button variant="contained" component="span" sx={{ mt: 2 }}>
+                    <Avatar sx={{ marginRight: '8px' }}>
+                      <FolderIcon />
+                    </Avatar>
+                    Browse File
+                  </Button>
                 </label>
               </Stack>
               <FormControl fullWidth sx={{ mt: 3 }}>
@@ -134,7 +134,7 @@ const ChatBot = () => {
                   )}
                   <ListItemText
                     primary={message.content}
-                    secondary={message.user === 'You' ? 
+                    secondary={message.user === 'You' ?
                       <Stack direction="row" justifyContent="flex-end" alignItems="center">
                         <ListItemAvatar>
                           <Avatar sx={{ bgcolor: grey[400], color: 'whitesmoke' }}>You</Avatar>
@@ -161,40 +161,40 @@ const ChatBot = () => {
             )}
           </Paper>
           <Stack
-  direction="row"
-  alignItems="center"
-  spacing={1}
-  sx={{
-    width: { xs: 'calc(100% - 450px)', md: 'calc(100% - 590px)' },
-    mt: 6,
-    mb: 1,
-    px: 2,
-    justifyContent: 'flex-end',
-    position: 'fixed',
-    bottom: 0, // Stick to the bottom
-    zIndex: 999, // Ensure it's above other content
-  }}
->
-  <TextField
-    value={messageInput}
-    onChange={(e) => setMessageInput(e.target.value)}
-    ref={messageInputRef}
-    id="message-input"
-    label="Type your message..."
-    multiline
-    fullWidth
-    InputProps={{
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton onClick={() => sendMessage(messageInput)}>
-            <SendIcon />
-          </IconButton>
-        </InputAdornment>
-      ),
-    }}
-    sx={{ textAlign: 'right' }}
-  />
-</Stack>
+            direction="row"
+            alignItems="center"
+            spacing={1}
+            sx={{
+              width: { xs: 'calc(100% - 450px)', md: 'calc(100% - 590px)' },
+              mt: 6,
+              mb: 1,
+              px: 2,
+              justifyContent: 'flex-end',
+              position: 'fixed',
+              bottom: 0, // Stick to the bottom
+              zIndex: 999, // Ensure it's above other content
+            }}
+          >
+            <TextField
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              ref={messageInputRef}
+              id="message-input"
+              label="Type your message..."
+              multiline
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={() => sendMessage(messageInput)}>
+                      <SendIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              sx={{ textAlign: 'right' }}
+            />
+          </Stack>
 
         </Grid>
       </Grid>
