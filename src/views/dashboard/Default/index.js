@@ -17,6 +17,7 @@ import Animationfront from 'components/Animationfront';
 import useTypematerial from 'components/TypeAnimation';
 import { useNavigate } from 'react-router';
 import './Style.css';
+import axios from 'axios';
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 const Dashboard = () => {
   const theme = useTheme();
@@ -29,11 +30,22 @@ const Dashboard = () => {
   useEffect(() => {
     setLoading(false);
   }, []);
+
+  // const getchat = async () => {
+  //   try {
+  //     const res = await axios.get('https://projectdev2114.azurewebsites.net/api/user/wakeUp');
+  //     console.log(res.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(()=>{
+  //   getchat();
+  // })
   const handleExploreNowClick = () => {
     // Navigate to the YearSelectionPage
     navigate('/year');
   };
-  
   return (
     <>
       <Grid
@@ -45,7 +57,7 @@ const Dashboard = () => {
           backgroundSize: 'cover',
           minHeight: '100vh',
           // width:'85vw'
-          borderRadius:"50px"
+          borderRadius: '50px'
         }}
       >
         <Grid item lg={12} md={6} sm={6} xs={12}>

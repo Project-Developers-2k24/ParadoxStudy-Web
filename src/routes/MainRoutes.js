@@ -4,7 +4,8 @@ import { lazy } from 'react';
 import MainLayout from '../layout/MainLayout';
 import Loadable from '../ui-component/Loadable';
 import Profile from 'views/profile/Profile';
-
+// import YearSelectionPage from 'views/dashboard/Default/yearSelection';
+// import NotesComponent from 'views/dashboard/Default/Notehandle';
 
 import ProtectedRoute from './ProtectedRoute';
 //import YearSelectionPage from 'views/dashboard/Default/yearSelection';
@@ -16,7 +17,7 @@ import Branch from 'views/dashboard/Default/Branch';
 import Subject from 'views/dashboard/Default/Subjects';
 import ChatBot from 'views/dashboard/Default/PrepParadoxBot';
 import Data from 'views/dashboard/Default/PdfData';
-
+import ResourceViewer from 'views/resources/ResourceViewer';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
@@ -66,32 +67,70 @@ const MainRoutes = {
       ]
     },
     {
-      path:'year',
-      element:<Year/>
-    },  
-    {
-      path:'year/:year',
-      element:<Semester/>
+      path: 'resources',
+      children: [
+        {
+          path: 'view-resource',
+          element: <ResourceViewer />
+        }
+      ]
     },
     {
-      path:'year/:year/semester/:semester',
-      element:<Branch/>
+      path: 'year',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Year />
+        </ProtectedRoute>
+      )
     },
     {
-      path:'year/:year/semester/:semester/branch/:branch',
-      element:<Subject/>
+      path: 'year/:year',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Semester />
+        </ProtectedRoute>
+      )
     },
     {
-      path:'year/:year/semester/:semester/branch/:branch/subject/:subject',
-      element:<Data/>
+      path: 'year/:year/semester/:semester',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          {' '}
+          <Branch />
+        </ProtectedRoute>
+      )
     },
     {
-      path:'pdf',
-      element:<PassportPDFViewer/>
-    },   
+      path: 'year/:year/semester/:semester/branch/:branch',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Subject />
+        </ProtectedRoute>
+      )
+    },
     {
-      path:'chatbot',
-      element:<ChatBot/>
+      path: 'year/:year/semester/:semester/branch/:branch/subject/:subject',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <Data />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: 'pdf',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <PassportPDFViewer />
+        </ProtectedRoute>
+      )
+    },
+    {
+      path: 'chatbot',
+      element: (
+        <ProtectedRoute isAuthorized={isAuthorized}>
+          <ChatBot />
+        </ProtectedRoute>
+      )
     },
     {
       path: 'utils',
@@ -111,6 +150,7 @@ const MainRoutes = {
         }
       ]
     },
+
     {
       path: 'utils',
       children: [
