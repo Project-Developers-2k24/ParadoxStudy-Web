@@ -1,21 +1,32 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PassportPDFViewer from './PDFViewer'; // Assuming the component file is named PassportPDFViewer.js
 import { useParams } from 'react-router';
 import { Typography, Grid } from '@mui/material'; // Import Grid component from Material-UI
+import axios from 'axios';
+import Skeleton from '@mui/material/Skeleton';
 
 const Data = () => {
   const { year, branch, subject } = useParams();
-  const pdfFiles = [
-    { url: '/clmsCertificateishika.pdf', name: 'PDF 1' },
-    { url: '/sample.pdf', name: 'PDF 2' },
-    { url: '/clmsCertificateishika.pdf', name: 'PDF 3' },
-    { url: '/clmsCertificateishika.pdf', name: 'PDF 4' },
-    { url: '/clmsCertificateishika.pdf', name: 'PDF 1' },
-    { url: '/sample.pdf', name: 'PDF 2' },
-    { url: '/clmsCertificateishika.pdf', name: 'PDF 3' },
-    { url: '/clmsCertificateishika.pdf', name: 'PDF 4' },
-  ];
+  const [pdfFiles, setPdfFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const getPdfData = async () => {
+    try {
+      const formData = new FormData();
+      formData.append('userId', '65fbad5c75999ee397495616');
+
+      const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
+      setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getPdfData();
+  }, []);
 
   return (
     <div>
@@ -24,14 +35,17 @@ const Data = () => {
       </Typography>
       {/* Wrap PassportPDFViewer components in a Grid container */}
       <Grid container spacing={2}>
-        {pdfFiles.map((pdf, index) => (
-          <Grid key={index} item xs={12} sm={6} md={3}>
-            {/* Set xs={12} to occupy full width on extra small screens */}
-            {/* Set sm={6} to occupy 50% of the width on medium screens */}
-            {/* Set md={3} to occupy 25% of the width on large screens */}
-            <PassportPDFViewer pdfData={pdf} /> {/* Adjusted prop name here */}
-          </Grid>
-        ))}
+        {loading
+          ? Array.from(new Array(8)).map((_, index) => (
+              <Grid key={index} item xs={12} sm={6} md={3}>
+                <Skeleton variant="rounded" width="100%" height={200} />
+              </Grid>
+            ))
+          : pdfFiles.map((pdf, index) => (
+              <Grid key={index} item xs={12} sm={6} md={3}>
+                <PassportPDFViewer pdfData={pdf} />
+              </Grid>
+            ))}
       </Grid>
     </div>
   );

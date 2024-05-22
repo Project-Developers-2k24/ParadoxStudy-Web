@@ -22,12 +22,12 @@
     &:hover > .ps__thumb-y,
     &:focus > .ps__thumb-y,
     &.ps--clicking .ps__thumb-y {
-      background-color: $grey500;
+      background-color: white;
       width: 5px;
     }
   }
   .ps__thumb-y {
-    background-color: $grey500;
+    background-color: white;
     border-radius: 6px;
     width: 5px;
     right: 0;

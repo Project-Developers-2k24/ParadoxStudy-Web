@@ -37,22 +37,26 @@ const PassportPDFViewer = ({ pdfData }) => {
 
   const handleChatWithMaruthi = () => {
     // Implement the logic to open the chat with Maruthi here
-    navigate('/chatbot');
+    navigate('/chatbot', {
+      state: {
+        pdfData: pdfData
+      }
+    });
   };
 
   const handleZoomIn = () => {
-    setZoomLevel(prev => prev + 0.1);
+    setZoomLevel((prev) => prev + 0.1);
   };
 
   const handleZoomOut = () => {
-    setZoomLevel(prev => prev - 0.1);
+    setZoomLevel((prev) => prev - 0.1);
   };
 
   return (
     <div>
       {showPdf ? (
         <div>
-          <Document file={pdfData.url} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
             {Array.from(new Array(numPages), (el, index) => (
               <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
             ))}
@@ -63,11 +67,8 @@ const PassportPDFViewer = ({ pdfData }) => {
         <div>
           <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', marginBottom: '20px', borderColor: '#e0e0e0' }}>
             <CardContent>
-              {pdfData.url ? (
-                <Document
-                  file={pdfData.url}
-                  onLoadSuccess={onDocumentLoadSuccess}
-                >
+              {pdfData.docs_url ? (
+                <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
                   <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
                 </Document>
               ) : (
@@ -78,10 +79,10 @@ const PassportPDFViewer = ({ pdfData }) => {
           {/* Add AnimateButton component for View PDF */}
           <Box display="flex" flexDirection="column" gap={1}>
             <Box>
-              <CustomButton text="View Pdf" onClick={handleViewPDF} size="small"/>
+              <CustomButton text="View Pdf" onClick={handleViewPDF} size="small" />
             </Box>
             <Box>
-              <CustomButton text="Chat with Maruthi" onClick={handleChatWithMaruthi} size="small"/>
+              <CustomButton text="Chat with Maruthi" onClick={handleChatWithMaruthi} size="small" />
             </Box>
           </Box>
         </div>
@@ -89,7 +90,7 @@ const PassportPDFViewer = ({ pdfData }) => {
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>
           <Box display="flex" justifyContent="space-between" alignItems="center">
-            {pdfData.name}
+            {pdfData.docs_name}
             <Box>
               <IconButton onClick={handleZoomIn}>
                 <ZoomInIcon />
@@ -97,14 +98,16 @@ const PassportPDFViewer = ({ pdfData }) => {
               <IconButton onClick={handleZoomOut}>
                 <ZoomOutIcon />
               </IconButton>
-              <IconButton onClick={handleCloseDialog}> {/* Close button */}
+              <IconButton onClick={handleCloseDialog}>
+                {' '}
+                {/* Close button */}
                 <CloseIcon />
               </IconButton>
             </Box>
           </Box>
         </DialogTitle>
         <DialogContent>
-          <Document file={pdfData.url}>
+          <Document file={pdfData.docs_url}>
             {Array.from(new Array(numPages), (el, index) => (
               <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
             ))}
@@ -116,9 +119,3 @@ const PassportPDFViewer = ({ pdfData }) => {
 };
 
 export default PassportPDFViewer;
-
-
-
-
-
-
