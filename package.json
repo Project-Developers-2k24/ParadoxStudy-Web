@@ -2,7 +2,7 @@
   "name": "paradoxstudy",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://20.42.96.57:8000",
+  "proxy": "http://172.190.120.7:8000",
   "homepage": "https://65ed6e34aaf1ae4458f26b9d--paradoxstu.netlify.app",
   "dependencies": {
     "@emotion/cache": "^11.11.0",

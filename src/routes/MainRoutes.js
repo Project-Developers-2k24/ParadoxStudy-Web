@@ -45,6 +45,19 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
+      path: 'resources',
+      children: [
+        {
+          path: 'view-resource',
+          element: (
+            <ProtectedRoute isAuthorized={isAuthorized}>
+              <ResourceViewer />
+            </ProtectedRoute>
+          )
+        }
+      ]
+    },
+    {
       path: 'profile',
       children: [
         {
@@ -66,15 +79,7 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path: 'resources',
-      children: [
-        {
-          path: 'view-resource',
-          element: <ResourceViewer />
-        }
-      ]
-    },
+
     {
       path: 'year',
       element: (
@@ -137,7 +142,11 @@ const MainRoutes = {
       children: [
         {
           path: 'util-typography',
-          element: <UtilsTypography />
+          element: (
+            <ProtectedRoute isAuthorized={isAuthorized}>
+              <UtilsTypography />
+            </ProtectedRoute>
+          )
         }
       ]
     },

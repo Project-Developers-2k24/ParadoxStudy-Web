@@ -9,11 +9,14 @@ const Data = () => {
   const { year, branch, subject } = useParams();
   const [pdfFiles, setPdfFiles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState('');
 
   const getPdfData = async () => {
     try {
+      const id = localStorage.getItem('userId');
+      setUserId(id);
       const formData = new FormData();
-      formData.append('userId', '65fbad5c75999ee397495616');
+      formData.append('userId', id);
 
       const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
       setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
