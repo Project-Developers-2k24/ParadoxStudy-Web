@@ -8,7 +8,7 @@ import resources from './resources';
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [profile, dashboard, pages,resources,utilities, other]
+  items: [profile, resources, dashboard, pages, utilities, other]
 };
 
 export default menuItems;

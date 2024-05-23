@@ -1,5 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, Dialog, DialogContent, DialogTitle, IconButton, Drawer, TextField, Button, Typography, Grid } from '@mui/material';
+import {
+  Card,
+  CardContent,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Drawer,
+  TextField,
+  Button,
+  Typography,
+  Grid,
+  CircularProgress
+} from '@mui/material';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useNavigate } from 'react-router';
 import { Box } from '@mui/system';
@@ -9,6 +22,7 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import CloseIcon from '@mui/icons-material/Close';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -23,13 +37,14 @@ const ResourceViewer = () => {
   const [year, setYear] = useState('');
   const [uploadedResource, setUploadedResource] = useState(null);
   const [pdfFiles, setPdfFiles] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getPdfData = async () => {
       try {
         const formData = new FormData();
-        formData.append('userId', '65fbad5c75999ee397495616');
+        const id = localStorage.getItem('userId');
+        formData.append('userId', id);
 
         const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
         setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
@@ -47,7 +62,8 @@ const ResourceViewer = () => {
     setNumPages(numPages);
   };
 
-  const handleViewPDF = () => {
+  const handleViewPDF = (r) => {
+    setUploadedResource(r.docs_url);
     setDialogOpen(true);
   };
 
@@ -55,10 +71,10 @@ const ResourceViewer = () => {
     setDialogOpen(false);
   };
 
-  const handleChatWithMaruthi = () => {
+  const handleChatWithMaruthi = (e) => {
     navigate('/chatbot', {
       state: {
-        pdfData: pdfFiles
+        pdfData: e
       }
     });
   };
@@ -83,27 +99,57 @@ const ResourceViewer = () => {
     setUploadedResource(e.target.files[0]);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const id = localStorage.getItem('userId');
     if (uploadedResource) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const pdfData = e.target.result;
-        const newResource = { docs_url: pdfData, docs_name: uploadedResource.name, subject, year };
-        setPdfFiles(prevData => {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append('pdf', uploadedResource); // Append the uploaded file
+      formData.append('name', subject); // Append other form fields
+      formData.append('sem', year); // Append other form fields
+      formData.append('userId', id); // Append other form fields
+      formData.append('chatId', id); // Append other form fields
+
+      try {
+        const response = await axios.post('https://projectdev2114.azurewebsites.net/api/user/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
+          }
+        });
+
+        // Assuming the backend responds with some data
+        console.log('Response:', response.data);
+
+        const newResource = { docs_url: response.data.axiosResponseData.uri, docs_name: uploadedResource.name, subject, year };
+        setPdfFiles((prevData) => {
           return Array.isArray(prevData) ? [...prevData, newResource] : [prevData, newResource];
         });
+        toast.success(response.data.message);
+        setLoading(false);
+        setUploadedResource(null);
+        setSubject('');
+        setYear('');
         setDrawerOpen(false);
-      };
-      reader.readAsDataURL(uploadedResource);
+        // Update UI or take further actions based on the response
+      } catch (error) {
+        setLoading(false);
+        setUploadedResource(null);
+        setSubject('');
+        setYear('');
+        setDrawerOpen(false);
+        toast.error(error.response.data.message);
+        console.error('Error uploading file:', error);
+        // Handle error
+      }
     }
   };
 
   return (
-    <Box style={{mt:'2px'}}>
+    <Box style={{ mt: '2px' }}>
       <Box width="100%" display="flex" justifyContent="center" alignItems="center" position="relative" mb={2}>
         <Typography variant="h3" gutterBottom>
-        Learning Resources
+          Learning Resources
         </Typography>
         <IconButton onClick={handleDrawerOpen} style={{ position: 'absolute', right: 20 }}>
           <FolderOpenIcon />
@@ -120,8 +166,8 @@ const ResourceViewer = () => {
               </CardContent>
             </Card>
             <Box display="flex" flexDirection="column" gap={1} mt={1} width="200px">
-              <CustomButton text="View PDF" onClick={handleViewPDF} size="small" />
-              <CustomButton text="Chat with Maruthi" onClick={handleChatWithMaruthi} size="small" />
+              <CustomButton text="View PDF" onClick={() => handleViewPDF(resource)} size="small" />
+              <CustomButton text="Chat with Maruthi" onClick={() => handleChatWithMaruthi(resource)} size="small" />
             </Box>
           </Grid>
         ))}
@@ -129,34 +175,28 @@ const ResourceViewer = () => {
       <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
         <Box p={2} width={250}>
           <form onSubmit={handleFormSubmit}>
-            <TextField
-              label="Subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
-            <TextField
-              label="Year"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              fullWidth
-              margin="normal"
-            />
+            <TextField label="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} fullWidth margin="normal" />
+            <TextField label="Sem" value={year} onChange={(e) => setYear(e.target.value)} fullWidth margin="normal" />
             <Button variant="contained" component="label" fullWidth>
               Choose File
               <input type="file" hidden onChange={handleFileChange} />
             </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              fullWidth
-              disabled={!uploadedResource}
-              style={{ marginTop: '20px' }}
-            >
-              Upload
-            </Button>
+            {loading ? (
+              <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} style={{ marginTop: '20px' }}>
+                <CircularProgress />
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                disabled={!uploadedResource}
+                style={{ marginTop: '20px' }}
+              >
+                Upload
+              </Button>
+            )}
           </form>
         </Box>
       </Drawer>
@@ -178,7 +218,7 @@ const ResourceViewer = () => {
           </Box>
         </DialogTitle>
         <DialogContent>
-          <Document file={uploadedResource ? URL.createObjectURL(uploadedResource) : pdfFiles.docs_url}>
+          <Document file={uploadedResource}>
             {Array.from(new Array(numPages), (el, index) => (
               <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
             ))}

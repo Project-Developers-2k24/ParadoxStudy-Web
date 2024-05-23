@@ -9,14 +9,22 @@ const resources = {
   id: 'resources',
   title: 'Resources',
   type: 'group',
+  icon: icons.IconFileText,
   children: [
     {
       id: 'view-resource',
       title: 'Resources',
-      type: 'item',
-      url: '/resources/view-resource',
+      type: 'collapse',
       icon: icons.IconFileText,
-      breadcrumbs: false
+      children: [
+        {
+          id: 'view-resource',
+          title: 'Resources',
+          type: 'item',
+          url: '/resources/view-resource',
+          breadcrumbs: false
+        }
+      ]
     }
   ]
 };

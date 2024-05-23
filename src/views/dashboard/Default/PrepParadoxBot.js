@@ -231,7 +231,6 @@ const ChatBot = () => {
 
   return (
     <div style={{ position: 'relative', backgroundColor: 'white', minHeight: '100vh', borderRadius: '10px', padding: '10px' }}>
-      
       <AppBar position="static" color="primary" sx={{ borderRadius: '10px', height: '50px', marginBottom: '10px' }}>
         <Stack direction="row" alignItems="center">
           {userDataLoading ? (
@@ -335,10 +334,9 @@ const ChatBot = () => {
                               sx={{
                                 backgroundColor: message.user === 'You' ? 'lightgrey' : 'lightgrey',
                                 marginBottom: 4, // Adjust margin for spacing between cards
-                                borderRadius: '10px',
-                               
+                                borderRadius: '10px'
+
                                 // marginLeft:"10%"
-                                
                               }}
                             >
                               <CardContent>

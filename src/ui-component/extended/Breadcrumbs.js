@@ -29,7 +29,7 @@ const linkSX = {
 
 const Breadcrumbs = ({ card, divider, icon, icons, maxItems, navigation, rightAlign, separator, title, titleBottom, ...others }) => {
   const theme = useTheme();
-
+  // console.log(navigation)
   const iconStyle = {
     marginRight: theme.spacing(0.75),
     marginTop: `-${theme.spacing(0.25)}`,
@@ -48,6 +48,7 @@ const Breadcrumbs = ({ card, divider, icon, icons, maxItems, navigation, rightAl
         if (collapse.type && collapse.type === 'collapse') {
           getCollapse(collapse);
         } else if (collapse.type && collapse.type === 'item') {
+          console.log(collapse.url+""+collapse.type)
           if (document.location.pathname === config.basename + collapse.url) {
             setMain(menu);
             setItem(collapse);
