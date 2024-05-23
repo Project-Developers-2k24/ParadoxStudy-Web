@@ -13,7 +13,7 @@ const resources = {
   children: [
     {
       id: 'view-resource',
-      title: 'Resources',
+      title: 'Upload Resources',
       type: 'collapse',
       icon: icons.IconFileText,
       children: [

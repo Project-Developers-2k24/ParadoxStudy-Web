@@ -24,7 +24,6 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-// Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const ResourceViewer = () => {
@@ -34,13 +33,14 @@ const ResourceViewer = () => {
   const [zoomLevel, setZoomLevel] = useState(1);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [subject, setSubject] = useState('');
-  const [year, setYear] = useState('');
+  const [sem, setSem] = useState('');
   const [uploadedResource, setUploadedResource] = useState(null);
   const [pdfFiles, setPdfFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getPdfData = async () => {
+      setLoading(true);
       try {
         const formData = new FormData();
         const id = localStorage.getItem('userId');
@@ -64,6 +64,7 @@ const ResourceViewer = () => {
 
   const handleViewPDF = (r) => {
     setUploadedResource(r.docs_url);
+    setNumPages(null); // Reset numPages to force re-render
     setDialogOpen(true);
   };
 
@@ -71,10 +72,10 @@ const ResourceViewer = () => {
     setDialogOpen(false);
   };
 
-  const handleChatWithMaruthi = (e) => {
+  const handleChatWithMaruthi = (resource) => {
     navigate('/chatbot', {
       state: {
-        pdfData: e
+        pdfData: resource
       }
     });
   };
@@ -106,10 +107,10 @@ const ResourceViewer = () => {
       setLoading(true);
       const formData = new FormData();
       formData.append('pdf', uploadedResource); // Append the uploaded file
-      formData.append('name', subject); // Append other form fields
-      formData.append('sem', year); // Append other form fields
-      formData.append('userId', id); // Append other form fields
-      formData.append('chatId', id); // Append other form fields
+      formData.append('name', subject); // Append subject
+      formData.append('sem', sem); // Append semester
+      formData.append('userId', id); // Append user ID
+      formData.append('chatId', id); // Append chat ID
 
       try {
         const response = await axios.post('https://projectdev2114.azurewebsites.net/api/user/upload', formData, {
@@ -121,7 +122,12 @@ const ResourceViewer = () => {
         // Assuming the backend responds with some data
         console.log('Response:', response.data);
 
-        const newResource = { docs_url: response.data.axiosResponseData.uri, docs_name: uploadedResource.name, subject, year };
+        const newResource = {
+          docs_url: response.data.axiosResponseData.uri,
+          docs_name: uploadedResource.name,
+          subject: subject,
+          sem: sem
+        };
         setPdfFiles((prevData) => {
           return Array.isArray(prevData) ? [...prevData, newResource] : [prevData, newResource];
         });
@@ -129,14 +135,14 @@ const ResourceViewer = () => {
         setLoading(false);
         setUploadedResource(null);
         setSubject('');
-        setYear('');
+        setSem('');
         setDrawerOpen(false);
         // Update UI or take further actions based on the response
       } catch (error) {
         setLoading(false);
         setUploadedResource(null);
         setSubject('');
-        setYear('');
+        setSem('');
         setDrawerOpen(false);
         toast.error(error.response.data.message);
         console.error('Error uploading file:', error);
@@ -158,6 +164,7 @@ const ResourceViewer = () => {
       <Grid container spacing={1}>
         {pdfFiles.map((resource, index) => (
           <Grid key={`pdf_${index}`} item xs={12} sm={6} md={3} container direction="column" alignItems="center">
+            {/* <Typography variant="h6">{resource.sem} - {resource.subject}</Typography> */}
             <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', borderColor: '#e0e0e0' }}>
               <CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
                 <Document file={resource.docs_url}>
@@ -176,7 +183,7 @@ const ResourceViewer = () => {
         <Box p={2} width={250}>
           <form onSubmit={handleFormSubmit}>
             <TextField label="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} fullWidth margin="normal" />
-            <TextField label="Sem" value={year} onChange={(e) => setYear(e.target.value)} fullWidth margin="normal" />
+            <TextField label="Sem" value={sem} onChange={(e) => setSem(e.target.value)} fullWidth margin="normal" />
             <Button variant="contained" component="label" fullWidth>
               Choose File
               <input type="file" hidden onChange={handleFileChange} />
@@ -200,7 +207,7 @@ const ResourceViewer = () => {
           </form>
         </Box>
       </Drawer>
-      <Dialog open={dialogOpen} onClose={handleCloseDialog}>
+      {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>
           <Box display="flex" justifyContent="space-between" alignItems="center">
             PDF Viewer
@@ -219,6 +226,31 @@ const ResourceViewer = () => {
         </DialogTitle>
         <DialogContent>
           <Document file={uploadedResource}>
+            {Array.from(new Array(numPages), (el, index) => (
+              <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
+            ))}
+          </Document>
+        </DialogContent>
+      </Dialog> */}
+      <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="md" fullWidth>
+        <DialogTitle>
+          <Box display="flex" justifyContent="space-between" alignItems="center">
+            PDF Viewer
+            <Box>
+              <IconButton onClick={handleZoomIn}>
+                <ZoomInIcon />
+              </IconButton>
+              <IconButton onClick={handleZoomOut}>
+                <ZoomOutIcon />
+              </IconButton>
+              <IconButton onClick={handleCloseDialog}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <Document file={uploadedResource} onLoadSuccess={onDocumentLoadSuccess}>
             {Array.from(new Array(numPages), (el, index) => (
               <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
             ))}
