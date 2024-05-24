@@ -13,6 +13,7 @@ import {
   Grid,
   CircularProgress
 } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useNavigate } from 'react-router';
 import { Box } from '@mui/system';
@@ -37,10 +38,11 @@ const ResourceViewer = () => {
   const [uploadedResource, setUploadedResource] = useState(null);
   const [pdfFiles, setPdfFiles] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [getloading, setGetLoading] = useState(false);
 
   useEffect(() => {
     const getPdfData = async () => {
-      setLoading(true);
+      setGetLoading(true);
       try {
         const formData = new FormData();
         const id = localStorage.getItem('userId');
@@ -51,7 +53,7 @@ const ResourceViewer = () => {
       } catch (error) {
         console.log(error);
       } finally {
-        setLoading(false);
+        setGetLoading(false);
       }
     };
 
@@ -161,27 +163,42 @@ const ResourceViewer = () => {
           <FolderOpenIcon />
         </IconButton>
       </Box>
-      <Grid container spacing={1}>
-        {pdfFiles.map((resource, index) => (
-          <Grid key={`pdf_${index}`} item xs={12} sm={6} md={3} container direction="column" alignItems="center">
-            {/* <Typography variant="h6">{resource.sem} - {resource.subject}</Typography> */}
-            <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', borderColor: '#e0e0e0' }}>
-              <CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
-                <Document file={resource.docs_url}>
-                  <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
-                </Document>
-              </CardContent>
-            </Card>
-            <Box display="flex" flexDirection="column" gap={1} mt={1} width="200px">
-              <CustomButton text="View PDF" onClick={() => handleViewPDF(resource)} size="small" />
-              <CustomButton text="Chat with Maruthi" onClick={() => handleChatWithMaruthi(resource)} size="small" />
+      {getloading ? (
+        <Grid container spacing={1}>
+          <Skeleton variant="rounded" width="100%" height={200} />
+        </Grid>
+      ) : (
+        <Grid container spacing={1}>
+          {pdfFiles.length === 0 ? (
+            <Box display="flex" justifyContent="center" alignItems="center" height="50vh">
+              <Typography variant="h5">Please upload a PDF first to chat with Maruthi.</Typography>
             </Box>
-          </Grid>
-        ))}
-      </Grid>
+          ) : (
+            pdfFiles.map((resource, index) => (
+              <Grid key={`pdf_${index}`} item xs={12} sm={6} md={3} container direction="column" alignItems="center">
+                {/* <Typography variant="h6">{resource.sem} - {resource.subject}</Typography> */}
+                <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', borderColor: '#e0e0e0' }}>
+                  <CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
+                    <Document file={resource.docs_url}>
+                      <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
+                    </Document>
+                  </CardContent>
+                </Card>
+                <Box display="flex" flexDirection="column" gap={1} mt={1} width="200px">
+                  <CustomButton text="View PDF" onClick={() => handleViewPDF(resource)} size="small" />
+                  <CustomButton text="Chat with Maruthi" onClick={() => handleChatWithMaruthi(resource)} size="small" />
+                </Box>
+              </Grid>
+            ))
+          )}
+        </Grid>
+      )}
       <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
         <Box p={2} width={250}>
           <form onSubmit={handleFormSubmit}>
+            <Typography variant="h3" gutterBottom>
+              Upload Book here :
+            </Typography>
             <TextField label="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} fullWidth margin="normal" />
             <TextField label="Sem" value={sem} onChange={(e) => setSem(e.target.value)} fullWidth margin="normal" />
             <Button variant="contained" component="label" fullWidth>
