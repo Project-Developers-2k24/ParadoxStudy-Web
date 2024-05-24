@@ -16,7 +16,7 @@ const Data = () => {
       const id = localStorage.getItem('userId');
       setUserId(id);
       const formData = new FormData();
-      formData.append('userId', id);
+      formData.append('userId', '65fbad5c75999ee397495616');
 
       const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
       setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
