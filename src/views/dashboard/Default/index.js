@@ -46,7 +46,6 @@ const Dashboard = () => {
     // Navigate to the YearSelectionPage
     navigate('/year');
   };
-
   return (
     <>
       <Grid
