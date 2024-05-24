@@ -53,6 +53,15 @@ const utilities = {
           url: '/icons/tabler-icons',
           breadcrumbs: false
         },
+        // {
+        //   id: 'view-resource',
+        //   title: 'Resources',
+        //   type: 'item',
+        //   url: '/resources/view-resource',
+        //   // icon: icons.IconFileText,
+        //   breadcrumbs: false
+        // },
+        
         {
           id: 'material-icons',
           title: 'Material Icons',

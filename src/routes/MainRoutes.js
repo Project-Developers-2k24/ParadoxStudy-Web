@@ -6,7 +6,7 @@ import Loadable from '../ui-component/Loadable';
 import Profile from 'views/profile/Profile';
 // import YearSelectionPage from 'views/dashboard/Default/yearSelection';
 // import NotesComponent from 'views/dashboard/Default/Notehandle';
-import PDFViewer from 'views/dashboard/Default/PDFViewer';
+
 import ProtectedRoute from './ProtectedRoute';
 //import YearSelectionPage from 'views/dashboard/Default/yearSelection';
 import PassportPDFViewer from 'views/dashboard/Default/PDFViewer';
@@ -17,6 +17,7 @@ import Branch from 'views/dashboard/Default/Branch';
 import Subject from 'views/dashboard/Default/Subjects';
 import ChatBot from 'views/dashboard/Default/PrepParadoxBot';
 import Data from 'views/dashboard/Default/PdfData';
+import ResourceViewer from 'views/resources/ResourceViewer';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('../views/dashboard/Default')));
@@ -44,6 +45,19 @@ const MainRoutes = {
       element: <DashboardDefault />
     },
     {
+      path: 'resources',
+      children: [
+        {
+          path: 'view-resource',
+          element: (
+            <ProtectedRoute isAuthorized={isAuthorized}>
+              <ResourceViewer />
+            </ProtectedRoute>
+          )
+        }
+      ]
+    },
+    {
       path: 'profile',
       children: [
         {
@@ -65,6 +79,7 @@ const MainRoutes = {
         }
       ]
     },
+
     {
       path: 'year',
       element: (
@@ -127,7 +142,11 @@ const MainRoutes = {
       children: [
         {
           path: 'util-typography',
-          element: <UtilsTypography />
+          element: (
+            <ProtectedRoute isAuthorized={isAuthorized}>
+              <UtilsTypography />
+            </ProtectedRoute>
+          )
         }
       ]
     },
@@ -140,6 +159,7 @@ const MainRoutes = {
         }
       ]
     },
+
     {
       path: 'utils',
       children: [

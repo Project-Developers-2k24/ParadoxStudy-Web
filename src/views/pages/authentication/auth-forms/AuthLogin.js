@@ -162,7 +162,8 @@ const FirebaseLogin = ({ ...others }) => {
             if (response.status === 200) {
               // Registration successful
               localStorage.setItem('token', response.data.token);
-
+              localStorage.setItem('userId', response.data.user._id);
+              console.log(response.data._id);
               window.location.href = '/';
               toast.success(response.data.message);
               setStatus({ success: true });
