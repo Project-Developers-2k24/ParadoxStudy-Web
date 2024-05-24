@@ -18,7 +18,7 @@ import {
   InputLabel,
   OutlinedInput,
   Stack,
-  Typography,
+  Typography
   // useMediaQuery
 } from '@mui/material';
 import { GoogleLogin } from 'react-google-login';
@@ -89,9 +89,15 @@ const FirebaseLogin = ({ ...others }) => {
               <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
                 {/* <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} /> */}
               </Box>
-              <GoogleLogin clientId={GoogleConfig.clientId} buttonText="Login with Google" onSuccess={onSuccess} onFailure={onFailure} style={{
-                height:"500px"
-              }}/>
+              <GoogleLogin
+                clientId={GoogleConfig.clientId}
+                buttonText="Login with Google"
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+                style={{
+                  height: '500px'
+                }}
+              />
             </Button>
           </AnimateButton>
         </Grid>
@@ -150,12 +156,16 @@ const FirebaseLogin = ({ ...others }) => {
               password: values.password
               // Include any other registration data you want to send
             });
+            // console.log(response.data);
 
             // Handle the response accordingly
             if (response.status === 200) {
               // Registration successful
+              localStorage.setItem('token', response.data.token);
+              localStorage.setItem('userId', response.data.user._id);
+              console.log(response.data._id);
+              window.location.href = '/';
               toast.success(response.data.message);
-              navigate('/');
               setStatus({ success: true });
               setSubmitting(false);
             } else {
