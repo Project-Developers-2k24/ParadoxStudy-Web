@@ -10,7 +10,7 @@ import App from './App';
 import { store } from 'store';
 
 // style + assets
-import 'assets/scss/style.scss';
+// import './assets/css/style.module.css';
 import config from './config';
 
 // ==============================|| REACT DOM RENDER  ||============================== //

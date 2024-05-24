@@ -12,11 +12,13 @@ import NotificationSection from './NotificationSection';
 
 // assets
 import { IconMenu2 } from '@tabler/icons-react';
+import { useEffect } from 'react';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
 const Header = ({ handleLeftDrawerToggle }) => {
   const theme = useTheme();
+  const token = localStorage.getItem('token');
 
   return (
     <>
@@ -62,7 +64,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       {/* notification & profile */}
       <NotificationSection />
-      <ProfileSection />
+
+      {token ? <ProfileSection /> : null}
     </>
   );
 };

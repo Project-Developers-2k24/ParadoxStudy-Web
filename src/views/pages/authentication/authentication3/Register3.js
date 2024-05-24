@@ -34,7 +34,7 @@ const Register = () => {
                       <Grid item xs={12}>
                         <Grid container direction="row" justifyContent="center" alignItems="center">
                           <Grid item xs={12} sm={6} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <img src={logo} alt="logoimage" width="400" />
+                            <img src={logo} alt="logoimage" width="200" />
                           </Grid>
                         </Grid>
                       </Grid>
