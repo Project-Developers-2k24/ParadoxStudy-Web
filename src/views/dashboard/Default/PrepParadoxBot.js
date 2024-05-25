@@ -85,7 +85,7 @@ const ChatBot = () => {
 
     setMessageInput('');
     setMessageHistory([...messageHistory, { user: 'You', content: message }]);
-    setIsBotTyping(true); // Set bot typing state to true
+    // setIsBotTyping(true); // Set bot typing state to true
 
     try {
       const formData = new FormData();
@@ -96,9 +96,9 @@ const ChatBot = () => {
       console.log(res.data);
 
       // Simulate typing delay before showing bot's response
-      setTimeout(() => {
-        setMessageHistory((prevMessages) => [...prevMessages, { user: 'Maruti', content: 'Typing...' }]);
-      }, 500); // Adjust delay time as needed
+      // setTimeout(() => {
+      //   setMessageHistory((prevMessages) => [...prevMessages, { user: 'Maruti', content: 'Typing...' }]);
+      // }, 500); // Adjust delay time as needed
 
       // Show bot's response after a delay
       setTimeout(() => {
@@ -117,7 +117,7 @@ const ChatBot = () => {
           ];
         }
         setMessageHistory((prevMessages) => [...prevMessages, { user: 'Maruti', content: formattedResponse }]);
-        setIsBotTyping(false); // Set bot typing state to false
+        // setIsBotTyping(false); // Set bot typing state to false
         setIsLoading(false); // Hide loading indicator
       }, 1500); // Adjust delay time as needed
     } catch (error) {
@@ -246,9 +246,9 @@ const ChatBot = () => {
           </Typography>
         </Stack>
       </AppBar>
-      <IconButton onClick={() => setOpen(!open)} sx={{ mt: 2, position: 'absolute', left: '0' }}>
+      {/* <IconButton onClick={() => setOpen(!open)} sx={{ mt: 2, position: 'absolute', left: '0' }}>
         <KeyboardArrowRightIcon />
-      </IconButton>
+      </IconButton> */}
       <Grid container spacing={1} sx={{ marginTop: '20px', marginBottom: '100px', flexDirection: 'row', justifyContent: 'center' }}>
         {/* <Grid item xs={12} sm={open ? 3 : 2} md={2}>
           <Paper style={{ height: '100vh', overflowY: 'auto', display: open ? 'block' : 'none' }}>
@@ -335,7 +335,6 @@ const ChatBot = () => {
                                 backgroundColor: message.user === 'You' ? 'lightgrey' : 'lightgrey',
                                 marginBottom: 4, // Adjust margin for spacing between cards
                                 borderRadius: '10px'
-
                                 // marginLeft:"10%"
                               }}
                             >
@@ -350,59 +349,91 @@ const ChatBot = () => {
                           ))
                         ) : (
                           <>
-                            <Card
-                              sx={{
-                                backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
-                                marginBottom: 1.5, // Adjust margin for spacing between cards
-                                borderRadius: '10px',
-                                maxWidth: message.user === 'You' ? '50%' : '70%',
-                                marginLeft: message.user === 'You' ? '50%' : '10%'
-                                // marginRight: message.user === 'You' ? '0%' : '20%'
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: message.user === 'You' ? 'row' : 'column',
+                                width: isSmallScreen && message.user === 'You' ? '320px' : '100%',
+                                gap: '3%'
                               }}
                             >
-                              <CardContent>
-                                <Typography variant={isSmallScreen ? 'h6' : 'h4'} sx={{ color: 'white' }}>
-                                  {message.content}
-                                </Typography>
-                              </CardContent>
-                            </Card>
+                              
+                              <Card
+                                sx={{
+                                  backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
+                                  marginBottom: 1.5, // Adjust margin for spacing between cards
+                                  borderRadius: '10px',
+                                  maxWidth: message.user === 'You' ? '100%' : '70%',
+                                  width: message.user === 'You' ? '100%' : '70%',
+                                  marginLeft: message.user === 'You' ? (isSmallScreen ? '30%' : '50%') : '50%'
+                                  // marginRight: message.user === 'You' ? '0%' : '20%'
+                                }}
+                              >
+                                <CardContent>
+                                  <Typography variant={isSmallScreen ? 'h6' : 'h4'} sx={{ color: 'white' }}>
+                                    {message.content}
+                                  </Typography>
+                                </CardContent>
+                              </Card>
+                              <>
+                                {
+                                  message.user === 'You' ? (
+                                    <Stack direction="row" justifyContent="center" alignItems="center">
+                                      <ListItemAvatar>
+                                        <div
+                                          style={{
+                                            marginLeft: '12px',
+                                            flexDirection: 'row',
+                                            justifyContent: 'center'
+                                          }}
+                                        >
+                                          {userDataLoading ? (
+                                            <Skeleton variant="cirlce" width={20} height={40} />
+                                          ) : (
+                                            <>
+                                              {isSmallScreen ? (
+                                                <Avatar
+                                                  sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '20px' }}
+                                                  style={{
+                                                    height: '35px',
+                                                    width: '35px'
+                                                  }}
+                                                  src={data.data.avatar ? data.data.avatar : null}
+                                                />
+                                              ) : (
+                                                <Avatar
+                                                  sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '20px' }}
+                                                  style={{
+                                                    height: '40px',
+                                                    width: '40px'
+                                                  }}
+                                                  src={data.data.avatar ? data.data.avatar : null}
+                                                />
+                                              )}
+                                            </>
+                                          )}
+                                        </div>
+                                        {userDataLoading ? (
+                                          <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
+                                            <Skeleton variant="text" />
+                                          </Typography>
+                                        ) : (
+                                          <Typography
+                                            variant="body1"
+                                            sx={{ whiteSpace: 'pre-wrap', color: 'black', fontSize: isSmallScreen ? '10px' : '15px' }}
+                                          >
+                                            {data.data.username}
+                                          </Typography>
+                                        )}
+                                      </ListItemAvatar>
+                                    </Stack>
+                                  ) : null // If the message is not from the user, secondary content is null
+                                }
+                              </>
+                            </div>
                           </>
                           // If content is not an array, render it as a Typography component
                         )
-                      }
-                      secondary={
-                        // Display user avatar if the message is from the user ('You')
-                        message.user === 'You' ? (
-                          <Stack direction="row" justifyContent="flex-end" alignItems="center">
-                            <ListItemAvatar>
-                              <div
-                                style={{
-                                  flexDirection: 'row',
-                                  justifyContent: 'center'
-                                }}
-                              >
-                                {userDataLoading ? (
-                                  <Skeleton variant="cirlce" width={20} height={40} />
-                                ) : (
-                                  <Avatar
-                                    sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '10px' }}
-                                    src={data.data.avatar ? data.data.avatar : null}
-                                  />
-                                )}
-
-                                {userDataLoading ? (
-                                  <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
-                                    <Skeleton variant="text" />
-                                  </Typography>
-                                ) : (
-                                  <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
-                                    {data.data.username}
-                                  </Typography>
-                                )}
-                              </div>
-                            </ListItemAvatar>
-                          </Stack>
-                        ) : null // If the message is not from the user, secondary content is null
                       }
                       sx={{
                         // Align text based on the message sender

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
+import { Button, Card, CardContent, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { useNavigate } from 'react-router';
 import { Box } from '@mui/system';
@@ -54,39 +54,39 @@ const PassportPDFViewer = ({ pdfData }) => {
 
   return (
     <div>
-      {showPdf ? (
-        <div>
-          <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
-            {Array.from(new Array(numPages), (el, index) => (
-              <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
-            ))}
-          </Document>
-          <button onClick={toggleView}>Show Image</button>
-        </div>
-      ) : (
-        <div>
-          <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', marginBottom: '20px', borderColor: '#e0e0e0' }}>
-            <CardContent>
-              {pdfData.docs_url ? (
-                <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
-                  <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
-                </Document>
-              ) : (
-                <img src={placeholder} alt="Passport Placeholder" style={{ width: '200px', height: '200px' }} />
-              )}
-            </CardContent>
-          </Card>
-          {/* Add AnimateButton component for View PDF */}
-          <Box display="flex" flexDirection="column" gap={1}>
-            <Box>
+      <div>
+        {showPdf ? (
+          <div>
+            <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
+              {Array.from(new Array(numPages), (el, index) => (
+                <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
+              ))}
+            </Document>
+            <Button variant="contained" color="primary" onClick={toggleView} style={{ marginTop: '20px' }}>
+              Show Image
+            </Button>
+          </div>
+        ) : (
+          <>
+            <Card style={{ width: '200px', height: '200px', border: '2px solid #e0e0e0', marginBottom: '20px' }}>
+              <CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
+                {pdfData.docs_url ? (
+                  <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
+                    <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
+                  </Document>
+                ) : (
+                  <img src={placeholder} alt="Passport Placeholder" style={{ width: '160px', height: '160px' }} />
+                )}
+              </CardContent>
+            </Card>
+            <Box display="flex" flexDirection="column" gap={1} alignItems="center" mt={1} width="200px">
               <CustomButton text="View Pdf" onClick={handleViewPDF} size="small" />
-            </Box>
-            <Box>
+
               <CustomButton text="Chat with Maruthi" onClick={handleChatWithMaruthi} size="small" />
             </Box>
-          </Box>
-        </div>
-      )}
+          </>
+        )}
+      </div>
       <Dialog open={dialogOpen} onClose={handleCloseDialog}>
         <DialogTitle>
           <Box display="flex" justifyContent="space-between" alignItems="center">

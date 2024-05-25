@@ -165,7 +165,7 @@ const ResourceViewer = () => {
       </Box>
       {getloading ? (
         <Grid container spacing={1}>
-          <Skeleton variant="rounded" width="100%" height={200} />
+          <Skeleton variant="rounded" width="100%" height={700} />
         </Grid>
       ) : (
         <Grid container spacing={1}>
@@ -179,9 +179,13 @@ const ResourceViewer = () => {
                 {/* <Typography variant="h6">{resource.sem} - {resource.subject}</Typography> */}
                 <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', borderColor: '#e0e0e0' }}>
                   <CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
-                    <Document file={resource.docs_url}>
-                      <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
-                    </Document>
+                    {resource ? (
+                      <Document file={resource.docs_url}>
+                        <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
+                      </Document>
+                    ) : (
+                      <Skeleton variant="rounded" width={160} height={160} />
+                    )}
                   </CardContent>
                 </Card>
                 <Box display="flex" flexDirection="column" gap={1} mt={1} width="200px">
