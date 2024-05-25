@@ -45,7 +45,7 @@ const Data = () => {
               </Grid>
             ))
           : pdfFiles.map((pdf, index) => (
-              <Grid key={index} item xs={12} sm={6} md={3}>
+            <Grid key={`pdf_${index}`} item xs={12} sm={6} md={3} container direction="column" alignItems="center">
                 <PassportPDFViewer pdfData={pdf} />
               </Grid>
             ))}
