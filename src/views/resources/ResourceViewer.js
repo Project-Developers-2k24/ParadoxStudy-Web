@@ -39,7 +39,7 @@ const ResourceViewer = () => {
   const [pdfFiles, setPdfFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [getloading, setGetLoading] = useState(false);
-
+  const [uploadProgress, setUploadProgress] = useState(0); // State to track upload progress
   useEffect(() => {
     const getPdfData = async () => {
       setGetLoading(true);
@@ -103,6 +103,7 @@ const ResourceViewer = () => {
   };
 
   const handleFormSubmit = async (e) => {
+    setUploadProgress(0);
     e.preventDefault();
     const id = localStorage.getItem('userId');
     if (uploadedResource) {
@@ -118,6 +119,11 @@ const ResourceViewer = () => {
         const response = await axios.post('https://projectdev2114.azurewebsites.net/api/user/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
+          },
+
+          onUploadProgress: (progressEvent) => {
+            const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+            setUploadProgress(progress); // Update upload progress state
           }
         });
 
@@ -210,9 +216,14 @@ const ResourceViewer = () => {
               <input type="file" hidden onChange={handleFileChange} />
             </Button>
             {loading ? (
-              <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} style={{ marginTop: '20px' }}>
-                <CircularProgress />
-              </Button>
+              <>
+                <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} style={{ marginTop: '20px' }}>
+                  <CircularProgress value={uploadProgress} />
+                </Button>
+                <Typography variant="body2" color="text.secondary">
+                  Uploading: {uploadProgress}%
+                </Typography>
+              </>
             ) : (
               <Button
                 type="submit"
@@ -228,31 +239,7 @@ const ResourceViewer = () => {
           </form>
         </Box>
       </Drawer>
-      {/* <Dialog open={dialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>
-          <Box display="flex" justifyContent="space-between" alignItems="center">
-            PDF Viewer
-            <Box>
-              <IconButton onClick={handleZoomIn}>
-                <ZoomInIcon />
-              </IconButton>
-              <IconButton onClick={handleZoomOut}>
-                <ZoomOutIcon />
-              </IconButton>
-              <IconButton onClick={handleCloseDialog}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-          </Box>
-        </DialogTitle>
-        <DialogContent>
-          <Document file={uploadedResource}>
-            {Array.from(new Array(numPages), (el, index) => (
-              <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
-            ))}
-          </Document>
-        </DialogContent>
-      </Dialog> */}
+
       <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="md" fullWidth>
         <DialogTitle>
           <Box display="flex" justifyContent="space-between" alignItems="center">

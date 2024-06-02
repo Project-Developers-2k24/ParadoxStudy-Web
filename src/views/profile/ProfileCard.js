@@ -25,36 +25,45 @@ const styles = {
 
 export default function ProfileCard(props) {
   const [avatar, setAvatar] = useState(props.avatar);
-  const [loading, setLoading] = useState(false); // State to manage loading state
-  const [error, setError] = useState(null); // State to manage error state
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [uploadProgress, setUploadProgress] = useState(0); // State to track upload progress
 
   const handleImageChange = async (event) => {
     try {
-      setLoading(true); // Set loading to true when uploading starts
-      setError(null); // Reset error state
-
+      setLoading(true);
+      setError(null);
+      setUploadProgress(0); // Reset upload progress state
+  
       const token = localStorage.getItem('token');
       const file = event.target.files[0];
-
+  
       const formData = new FormData();
       formData.append('avatar', file);
-
+  
       const response = await axios.patch(UPDATE, formData, {
         headers: {
           Authorization: `Bearer ${token}`
+        },
+        onUploadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+          console.log('Upload progress:', progress); // Log progress to check if it's updating correctly
+          setUploadProgress(progress); // Update upload progress state
         }
       });
+  
       console.log(response.data);
       toast.success('Avatar updated successfully');
-      setAvatar(response.data.data.avatar); // Update avatar state with the new avatar URL
-      setLoading(false); // Set loading to false when upload is completed
+      setAvatar(response.data.data.avatar);
+      setLoading(false);
     } catch (error) {
-      setError('Error updating avatar'); // Set error message
+      setError('Error updating avatar');
       console.error('Error updating avatar:', error);
       toast.error('Avatar update failed');
-      setLoading(false); // Set loading to false in case of error
+      setLoading(false);
     }
   };
+  
 
   const handleCameraIconClick = () => {
     document.getElementById('imageInput').click();
@@ -65,7 +74,12 @@ export default function ProfileCard(props) {
       <Grid container direction="column" justifyContent="center" alignItems="center" className="test">
         <Grid item sx={{ p: '1.5rem 0rem', textAlign: 'center' }}>
           {loading ? (
-            <CircularProgress sx={{ color: 'secondary.main' }} />
+            <div>
+              <CircularProgress sx={{ color: 'secondary.main', marginBottom: '1rem' }} />
+              <Typography variant="body2" color="text.secondary">
+                Uploading: {uploadProgress}%
+              </Typography>
+            </div>
           ) : (
             <Badge
               overlap="circular"
@@ -109,8 +123,7 @@ export default function ProfileCard(props) {
             View Public Profile
           </Button>
         </Grid>
-        {/* Render loader if loading state is true */}
-        {error && <Typography color="error">{error}</Typography>} {/* Render error message if error state is not null */}
+        {error && <Typography color="error">{error}</Typography>}
         <input type="file" id="imageInput" accept="image/jpeg" style={{ display: 'none' }} onChange={handleImageChange} />
       </Grid>
     </Card>
