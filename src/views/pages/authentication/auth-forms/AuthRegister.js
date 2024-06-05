@@ -57,20 +57,17 @@ const FirebaseRegister = ({ ...others }) => {
   };
   const handleFormSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
     try {
-      // Step 4: Send a POST request to your register endpoint
-      const response = await axios.post(REGISTER, {
-        username: values.fname + ' ' + values.lname,
-        email: values.email,
-        password: values.password
-      });
-
-      // Handle response if needed
-
-      toast.success(response.data.message);
-      navigate('/pages/login/login3');
-
-      setStatus();
-      setSubmitting(false);
+      // // Step 4: Send a POST request to your register endpoint
+      // const response = await axios.post(REGISTER, {
+      //   username: values.fname + ' ' + values.lname,
+      //   email: values.email,
+      //   password: values.password
+      // });
+      // // Handle response if needed
+      // toast.success(response.data.message);
+      // navigate('/pages/login/login3');
+      // setStatus();
+      // setSubmitting(false);
     } catch (err) {
       console.error(err);
       setErrors({ submit: err.message });
@@ -283,6 +280,21 @@ const FirebaseRegister = ({ ...others }) => {
                     </Typography>
                   }
                 />
+                <Typography
+                  variant="subtitle1"
+                  style={{
+                    color: 'red',
+                    textAlign: 'center',
+                    fontWeight: 'bold',
+                    marginTop: '20px',
+                    padding: '10px',
+                    border: '2px solid red',
+                    borderRadius: '5px',
+                    backgroundColor: '#ffe6e6'
+                  }}
+                >
+                  Registration is currently disabled due to heavy maintenance. We will be back soon.
+                </Typography>
               </Grid>
             </Grid>
             {errors.submit && (
@@ -293,7 +305,10 @@ const FirebaseRegister = ({ ...others }) => {
 
             <Box sx={{ mt: 2 }}>
               <AnimateButton>
-                <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                {/* <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                  Sign up
+                </Button> */}
+                <Button disableElevation disabled={true} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign up
                 </Button>
               </AnimateButton>
