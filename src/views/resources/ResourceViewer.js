@@ -522,9 +522,11 @@ import { useNavigate } from 'react-router';
 import { Box } from '@mui/system';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import axios from 'axios';
+import CloseIcon from '@mui/icons-material/Close'; 
 import { toast } from 'react-toastify';
 import PdfGrid from 'ui-component/pdfgrid'; // Import the PdfGrid component
 import { bookTypes } from 'api/Books';
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const ResourceViewer = () => {
@@ -617,9 +619,15 @@ const ResourceViewer = () => {
       fileReader.readAsArrayBuffer(file);
     }
   };
-  const handlePdfDelete=()=>{
-    
-  }
+
+  const handlePdfDelete = (resource) => {
+    // Handle PDF delete logic here
+  };
+
+  const handleRemovePreview = () => {
+    setUploadedResource(null);
+    setPdfPreview(null);
+  };
 
   const handleFormSubmit = async (e) => {
     setUploadProgress(0);
@@ -714,9 +722,9 @@ const ResourceViewer = () => {
               fullWidth
               margin="normal"
             >
-              {bookTypes.map((bookTypes) => (
-                <MenuItem key={bookTypes} value={bookTypes}>
-                  {bookTypes}
+              {bookTypes.map((bookType) => (
+                <MenuItem key={bookType} value={bookType}>
+                  {bookType}
                 </MenuItem>
               ))}
             </TextField>
@@ -728,10 +736,15 @@ const ResourceViewer = () => {
               <input type="file" hidden onChange={handleFileChange} />
             </Button>
             {pdfPreview && (
-              <Box mt={2} display="flex" justifyContent="center">
-                {/* <a href={pdfPreview} target="_blank" rel="noopener noreferrer"> */}
+              <Box mt={2} position="relative" display="flex" justifyContent="center">
                 <img src={pdfPreview} alt="PDF Preview" width="100" />
-                {/* </a> */}
+                <IconButton
+                  onClick={handleRemovePreview}
+                  aria-label="remove"
+                  style={{ position: 'absolute', top: 0, right: 0 }}
+                >
+                  <CloseIcon />
+                </IconButton>
               </Box>
             )}
             {loading ? (
