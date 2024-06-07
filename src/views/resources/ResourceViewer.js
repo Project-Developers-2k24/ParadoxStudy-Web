@@ -522,7 +522,7 @@ import { useNavigate } from 'react-router';
 import { Box } from '@mui/system';
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import axios from 'axios';
-import CloseIcon from '@mui/icons-material/Close'; 
+import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
 import PdfGrid from 'ui-component/pdfgrid'; // Import the PdfGrid component
 import { bookTypes } from 'api/Books';
@@ -551,6 +551,7 @@ const ResourceViewer = () => {
 
         const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
         setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
+        console.log(res.data.data);
       } catch (error) {
         console.log(error);
       } finally {
@@ -635,7 +636,7 @@ const ResourceViewer = () => {
     const id = localStorage.getItem('userId');
 
     // Check for duplicate PDFs
-    if (uploadedResource && pdfFiles.some(file => file.docs_name === uploadedResource.name)) {
+    if (uploadedResource && pdfFiles.some((file) => file.docs_name === uploadedResource.name)) {
       toast.error('The same PDF already exists!');
       return; // Prevent further execution if a duplicate is found
     }
@@ -645,7 +646,7 @@ const ResourceViewer = () => {
       const formData = new FormData();
       formData.append('pdf', uploadedResource); // Append the uploaded file
       formData.append('type', type); // Append type
-      formData.append('name', subject); // Append subject 
+      formData.append('subject', subject); // Append subject
       formData.append('filename', filename); // Append filename
 
       formData.append('userId', id); // Append user ID
@@ -668,7 +669,8 @@ const ResourceViewer = () => {
 
         const newResource = {
           docs_url: response.data.axiosResponseData.uri,
-          docs_name: uploadedResource.name,
+          docs_name: response.data.axiosResponseData.docs_name,
+          userId: response.data.axiosResponseData.userId,
           type: type,
           subject: subject,
           filename: filename
@@ -710,7 +712,7 @@ const ResourceViewer = () => {
           <FolderOpenIcon />
         </IconButton>
       </Box>
-      <PdfGrid pdfFiles={pdfFiles} onChatWithMaruti={onChatWithMaruti} onDeletePdf={handlePdfDelete}/> {/* Use PdfGrid component */}
+      <PdfGrid pdfFiles={pdfFiles} onChatWithMaruti={onChatWithMaruti} onDeletePdf={handlePdfDelete} /> {/* Use PdfGrid component */}
       <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
         <Box p={2} width={250}>
           <form onSubmit={handleFormSubmit}>
@@ -738,11 +740,7 @@ const ResourceViewer = () => {
             {pdfPreview && (
               <Box mt={2} position="relative" display="flex" justifyContent="center">
                 <img src={pdfPreview} alt="PDF Preview" width="100" />
-                <IconButton
-                  onClick={handleRemovePreview}
-                  aria-label="remove"
-                  style={{ position: 'absolute', top: 0, right: 0 }}
-                >
+                <IconButton onClick={handleRemovePreview} aria-label="remove" style={{ position: 'absolute', top: 0, right: 0 }}>
                   <CloseIcon />
                 </IconButton>
               </Box>

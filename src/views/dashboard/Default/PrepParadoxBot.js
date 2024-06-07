@@ -357,7 +357,7 @@
 //                                 gap: '3%'
 //                               }}
 //                             >
-                              
+
 //                               <Card
 //                                 sx={{
 //                                   backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
@@ -516,9 +516,6 @@
 
 // export default ChatBot;
 
-
-
-
 import React, { useState, useRef, useEffect } from 'react';
 import {
   AppBar,
@@ -580,11 +577,11 @@ const ChatBot = () => {
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
-    document.execCommand("copy");
+    document.execCommand('copy');
     selection.removeAllRanges();
-    alert("Code copied to clipboard!");
+    alert('Code copied to clipboard!');
   }
- 
+
   const pdfData = location.state ? location.state.pdfData : null;
 
   const [chat, setChat] = useState([]);
@@ -596,8 +593,8 @@ const ChatBot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [messageInput, setMessageInput] = useState('');
   const isSmallScreen = useMediaQuery('(max-width:786px)');
- 
-    const getUser = async () => {
+
+  const getUser = async () => {
     const token = localStorage.getItem('token');
     setToken(token);
     try {
@@ -673,7 +670,6 @@ const ChatBot = () => {
       setIsLoading(false); // Hide loading indicator
     }
   };
-
 
   const getChatData = async () => {
     try {
@@ -752,7 +748,7 @@ const ChatBot = () => {
   };
   const messageInputRef = useRef(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-    const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1.0);
   const [numPages, setNumPages] = useState(null);
 
@@ -766,8 +762,6 @@ const ChatBot = () => {
   //     setIsLoading(false);
   //   }, 1000);
   // };
-
-
 
   // Function to handle opening the PDF dialog
   const handleOpenDialog = () => {
@@ -815,7 +809,6 @@ const ChatBot = () => {
   return (
     <div style={{ position: 'relative', backgroundColor: 'white', minHeight: '100vh', borderRadius: '10px', padding: '10px' }}>
       <AppBar position="static" color="primary" sx={{ borderRadius: '10px', height: '50px', marginBottom: '10px' }}>
-     
         <Stack direction="row" alignItems="center">
           {userDataLoading ? (
             <Skeleton variant="cirlce" width={20} height={40} />
@@ -826,7 +819,7 @@ const ChatBot = () => {
             MARUTI :
           </Typography>
           <Typography variant="h3" noWrap component="div" color="purple" sx={{ p: 2 }}>
-            Document - {pdfData.docs_name}
+            Sub - {pdfData.type} : File - {pdfData.filename}
           </Typography>
         </Stack>
       </AppBar>
@@ -834,7 +827,7 @@ const ChatBot = () => {
         <KeyboardArrowRightIcon />
       </IconButton> */}
       <Grid container spacing={1} sx={{ marginTop: '20px', marginBottom: '100px', flexDirection: 'row', justifyContent: 'center' }}>
-      {/* <Grid item xs={12} sm={open ? 3 : 2} md={2}>
+        {/* <Grid item xs={12} sm={open ? 3 : 2} md={2}>
           <Paper style={{ height: '100vh', overflowY: 'auto', display: sidebarOpen ? 'block' : 'none' }}>
           <Collapse in={sidebarOpen}>
           <Button onClick={handleOpenPDF} variant="contained" color="primary">
@@ -843,9 +836,9 @@ const ChatBot = () => {
             </Collapse>
           </Paper>
         </Grid> */}
-       
+
         <Grid item xs={12} sm={open ? 9 : 10}>
-          <Paper style={{ height: '101%', overflowY: 'auto', borderRadius: '5px', backgroundColor: 'white' }}>
+          <Paper style={{ height: '102%', overflowY: 'auto', borderRadius: '5px', backgroundColor: 'white' }}>
             <List dense>
               {messageHistory.map((message, index) => (
                 <React.Fragment key={index}>
@@ -1076,94 +1069,87 @@ const ChatBot = () => {
             />
             
           </Stack> */}
-     <Stack
-  direction={isSmallScreen ? 'column' : 'row'}
-  alignItems="center"
-  justifyContent="center"
-  position="fixed"
-  bottom={0}
-  width={isSmallScreen ? '100%' : '69%'}
-  padding={2}
-  zIndex={999}
-  sx={{
-    '@media (max-width: 600px)': {
-      flexDirection: 'column'
-    }
-  }}
->
-  <Button
-    onClick={handleOpenDialog}
-    variant="contained"
-    color="primary"
-    size="small" // Reduce button size
-    sx={{ marginRight: isSmallScreen ? 50 : 2 }} // Adjust margin for smaller screens
-  >
-    Open PDF
-  </Button>
-  <TextField
-    variant="outlined"
-    placeholder="Enter your query"
-    value={messageInput}
-    onChange={(e) => setMessageInput(e.target.value)}
-    onKeyDown={(e) => {
-      if (e.key === 'Enter') {
-        sendMessage(messageInput);
-      }
-    }}
-    fullWidth
-    InputProps={{
-      endAdornment: (
-        <InputAdornment position="end">
-          <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
-            {isLoading ? <CircularProgress size={24} /> : <SendIcon />}
-          </IconButton>
-        </InputAdornment>
-      )
-    }}
-    sx={{
-      '& .MuiInputBase-root': {
-        borderRadius: '10px',
-        backgroundColor: 'white'
-      },
-      '& .Mui-focused fieldset': {
-        borderColor: 'white'
-      }
-    }}
-  />
-</Stack>
-
-
-
+          <Stack
+            direction={isSmallScreen ? 'column' : 'row'}
+            alignItems="center"
+            justifyContent="center"
+            position="fixed"
+            bottom={0}
+            width={isSmallScreen ? '100%' : '69%'}
+            padding={2}
+            zIndex={999}
+            sx={{
+              '@media (max-width: 600px)': {
+                flexDirection: 'column'
+              }
+            }}
+          >
+            <Button
+              onClick={handleOpenDialog}
+              variant="contained"
+              color="primary"
+              size="small" // Reduce button size
+              sx={{ marginRight: isSmallScreen ? 50 : 2 }} // Adjust margin for smaller screens
+            >
+              Open PDF
+            </Button>
+            <TextField
+              variant="outlined"
+              placeholder="Enter your query"
+              value={messageInput}
+              onChange={(e) => setMessageInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  sendMessage(messageInput);
+                }
+              }}
+              fullWidth
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
+                      {isLoading ? <CircularProgress size={24} /> : <SendIcon />}
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+              sx={{
+                '& .MuiInputBase-root': {
+                  borderRadius: '10px',
+                  backgroundColor: 'white'
+                },
+                '& .Mui-focused fieldset': {
+                  borderColor: 'white'
+                }
+              }}
+            />
+          </Stack>
         </Grid>
-        
       </Grid>
-      
-            <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-         <DialogTitle>
-           {pdfData.docs_name}
-           <IconButton onClick={handleCloseDialog} sx={{ position: 'absolute', right: 6, top: 6 }}>
-             <CloseIcon />
-           </IconButton>
-         </DialogTitle>
-         <DialogContent  sx={{ width: isSmallScreen ? '90vw' : '80vw', height: isSmallScreen ? '70vh' : '80vh' }}>
-           <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-           <IconButton onClick={handleZoomIn}>
-               <ZoomInIcon />
-             </IconButton>
-             <IconButton onClick={handleZoomOut}>
-               <ZoomOutIcon />
-             </IconButton>
-            
-           </Stack>
-           <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
-             {Array.from(new Array(numPages), (el, index) => (
-               <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
-             ))}
-           </Document>
-         </DialogContent>
-       </Dialog>
-       
 
+      <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>
+          {pdfData.docs_name}
+          <IconButton onClick={handleCloseDialog} sx={{ position: 'absolute', right: 6, top: 6 }}>
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ width: isSmallScreen ? '90vw' : '80vw', height: isSmallScreen ? '70vh' : '80vh' }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+            <IconButton onClick={handleZoomIn}>
+              <ZoomInIcon />
+            </IconButton>
+            <IconButton onClick={handleZoomOut}>
+              <ZoomOutIcon />
+            </IconButton>
+          </Stack>
+          <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
+            {Array.from(new Array(numPages), (el, index) => (
+              <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
+            ))}
+          </Document>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
