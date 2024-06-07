@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Card, CardContent, Box, IconButton } from '@mui/material';
+import { Grid, Card, CardContent, Box, IconButton, Typography } from '@mui/material';
 import { Document, Page } from 'react-pdf';
 import CustomButton from 'views/dashboard/Default/CustomButton';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,11 +9,17 @@ const PdfGrid = ({ pdfFiles, onChatWithMaruti, onDeletePdf }) => {
     <Grid container spacing={2}>
       {pdfFiles.map((resource, index) => (
         <Grid key={`pdf_${index}`} item xs={12} sm={6} md={3} container direction="column" alignItems="center">
+          <Typography variant="h6" align="center" style={{ marginTop: '10px', marginBottom: '10px' }}>
+                {resource.subject}
+              </Typography>
           <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', borderColor: '#e0e0e0', position: 'relative' }}>
+          
             <CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
+           
               <Document file={resource.docs_url}>
                 <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
               </Document>
+              
             </CardContent>
             <IconButton
               onClick={() => onDeletePdf(resource)}
