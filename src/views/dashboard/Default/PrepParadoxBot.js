@@ -41,6 +41,18 @@ import { USERBYID } from 'api/auth';
 
 const ChatBot = () => {
   const location = useLocation();
+  function copyCode(button) {
+    const codeBlock = button.parentElement.nextElementSibling.firstElementChild;
+    const range = document.createRange();
+    range.selectNodeContents(codeBlock);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.execCommand("copy");
+    selection.removeAllRanges();
+    alert("Code copied to clipboard!");
+  }
+ 
   const pdfData = location.state ? location.state.pdfData : null;
 
   const [chat, setChat] = useState([]);
@@ -291,7 +303,7 @@ const ChatBot = () => {
           </Paper>
         </Grid> */}
         <Grid item xs={12} sm={open ? 9 : 10}>
-          <Paper style={{ height: '100%', overflowY: 'auto', borderRadius: '5px', backgroundColor: 'white' }}>
+          <Paper style={{ height: '101%', overflowY: 'auto', borderRadius: '5px', backgroundColor: 'white' }}>
             <List dense>
               {messageHistory.map((message, index) => (
                 <React.Fragment key={index}>
@@ -357,7 +369,6 @@ const ChatBot = () => {
                                 gap: '3%'
                               }}
                             >
-                              
                               <Card
                                 sx={{
                                   backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
@@ -371,6 +382,7 @@ const ChatBot = () => {
                               >
                                 <CardContent>
                                   <Typography variant={isSmallScreen ? 'h6' : 'h4'} sx={{ color: 'white' }}>
+                                    {/* <div dangerouslySetInnerHTML={{ __html: message.content }} /> */}
                                     {message.content}
                                   </Typography>
                                 </CardContent>
