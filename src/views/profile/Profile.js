@@ -355,6 +355,7 @@ import SettingsCard from './SettingsCard';
 import './profile.css';
 import { USERBYID } from 'api/auth';
 import axios from 'axios';
+import LoadingParadox from 'views/utilities/LoadingParadox';
 
 // STYLE & THEME
 const theme = createTheme();
@@ -364,11 +365,13 @@ export default function Profile() {
   const [text, setText] = useState('');
   const [token, setToken] = useState('');
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getUser = async () => {
     const token = localStorage.getItem('token');
     setToken(token);
     try {
+      setLoading(true);
       const res = await axios.get(USERBYID, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -378,11 +381,13 @@ export default function Profile() {
       // Check the status code
       if (res.status === 200) {
         console.log('Success! User data retrieved:', res.data);
+
         setData(res.data);
       } else {
         console.log('Error:', res.status);
         // Handle other status codes if needed
       }
+      setLoading(false);
     } catch (error) {
       console.log('Error:', error);
     }
@@ -409,72 +414,78 @@ export default function Profile() {
   // const fullName = `${mainUser.firstName} ${mainUser.lastName}`;
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline>
-        {/* BACKGROUND */}
-        <Grid container direction="column" sx={{ overflowX: "hidden" }} className="profile_container">
-          <Grid item xs={12} md={6} sm={5} >
-            <img
-              alt="avatar"
-              style={{
-                width: '100vw',
-                height: '35vh',
-                objectFit: 'cover',
-                objectPosition: '50% 50%',
-                position: 'relative'
-              }}
-              className="cloud"
-              src="https://iris2.gettimely.com/images/default-cover-image.jpg"
-            />
-          </Grid>
-
-          {/* COMPONENTS */}
-          <Grid
-            container
-            direction={{ xs: 'column', md: 'row' }}
-            spacing={3}
-            sx={{
-              position: 'absolute',
-              top: '20vh',
-              px: { xs: 0, md: 7 }
-            }}
-            className="profileContainer"
-          >
-            {/* PROFILE CARD */}
-
-            <Grid item md={3}>
-              {data && data.data && (
-                <ProfileCard
-                  name={data.data.username}
-                  sub={data.data.username}
-                  dt1={mainUser.dt1}
-                  dt2={mainUser.dt2}
-                  dt3={mainUser.dt3}
-                  avatar={data.data.avatar}
+    <>
+      {loading ? (
+        <LoadingParadox />
+      ) : (
+        <ThemeProvider theme={theme}>
+          <CssBaseline>
+            {/* BACKGROUND */}
+            <Grid container direction="column" sx={{ overflowX: 'hidden' }} className="profile_container">
+              <Grid item xs={12} md={6} sm={5}>
+                <img
+                  alt="avatar"
+                  style={{
+                    width: '100vw',
+                    height: '35vh',
+                    objectFit: 'cover',
+                    objectPosition: '50% 50%',
+                    position: 'relative'
+                  }}
+                  className="cloud"
+                  src="https://iris2.gettimely.com/images/default-cover-image.jpg"
                 />
-              )}
-            </Grid>
+              </Grid>
 
-            {/* SETTINGS CARD */}
-            <Grid item md={9}>
-              {data && data.data && (
-                <SettingsCard
-                  username={data.data.username}
-                  phone={data.data.phone}
-                  avatar={data.data.avatar}
-                  institution={data.data.institution}
-                  email={data.data.email}
-                  sem={data.data.sem}
-                  year={data.data.year}
-                  country={data.data.country}
-                  gender={data.data.gender}
-                  branch={data.data.branch}
-                ></SettingsCard>
-              )}
+              {/* COMPONENTS */}
+              <Grid
+                container
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={3}
+                sx={{
+                  position: 'absolute',
+                  top: '20vh',
+                  px: { xs: 0, md: 7 }
+                }}
+                className="profileContainer"
+              >
+                {/* PROFILE CARD */}
+
+                <Grid item md={3}>
+                  {data && data.data && (
+                    <ProfileCard
+                      name={data.data.username}
+                      sub={data.data.username}
+                      dt1={mainUser.dt1}
+                      dt2={mainUser.dt2}
+                      dt3={mainUser.dt3}
+                      avatar={data.data.avatar}
+                    />
+                  )}
+                </Grid>
+
+                {/* SETTINGS CARD */}
+                <Grid item md={9}>
+                  {data && data.data && (
+                    <SettingsCard
+                      username={data.data.username}
+                      phone={data.data.phone}
+                      avatar={data.data.avatar}
+                      institution={data.data.institution}
+                      email={data.data.email}
+                      sem={data.data.sem}
+                      year={data.data.year}
+                      country={data.data.country}
+                      gender={data.data.gender}
+                      branch={data.data.branch}
+                    ></SettingsCard>
+                  )}
+                </Grid>
+              </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      </CssBaseline>
-    </ThemeProvider>
+          </CssBaseline>
+        </ThemeProvider>
+      )}
+    </>
   );
 }

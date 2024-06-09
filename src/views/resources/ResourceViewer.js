@@ -517,6 +517,8 @@ import {
   CircularProgress,
   MenuItem
 } from '@mui/material';
+import Lottie from 'react-lottie-player';
+import loadingJson from '../../utils/paradoxLoader.json';
 import { pdfjs } from 'react-pdf';
 import { useNavigate } from 'react-router';
 import { Box } from '@mui/system';
@@ -526,6 +528,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
 import PdfGrid from 'ui-component/pdfgrid'; // Import the PdfGrid component
 import { bookTypes } from 'api/Books';
+import LoadingParadox from 'views/utilities/LoadingParadox';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -703,73 +706,80 @@ const ResourceViewer = () => {
   };
 
   return (
-    <Box style={{ mt: '2px' }}>
-      <Box width="100%" display="flex" justifyContent="center" alignItems="center" position="relative" mb={2}>
-        <Typography variant="h3" gutterBottom>
-          Learning Resources
-        </Typography>
-        <IconButton onClick={handleDrawerOpen} style={{ position: 'absolute', right: 20 }}>
-          <FolderOpenIcon />
-        </IconButton>
-      </Box>
-      <PdfGrid pdfFiles={pdfFiles} onChatWithMaruti={onChatWithMaruti} onDeletePdf={handlePdfDelete} /> {/* Use PdfGrid component */}
-      <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
-        <Box p={2} width={250}>
-          <form onSubmit={handleFormSubmit}>
-            <TextField
-              select // Use select to create a dropdown
-              label="Type"
-              value={type}
-              onChange={(e) => setType(e.target.value)}
-              fullWidth
-              margin="normal"
-            >
-              {bookTypes.map((bookType) => (
-                <MenuItem key={bookType} value={bookType}>
-                  {bookType}
-                </MenuItem>
-              ))}
-            </TextField>
+    <>
+      {loading ? (
+         <LoadingParadox/>
+      ) : (
+        <Box style={{ mt: '2px' }}>
+          <Box width="100%" display="flex" justifyContent="center" alignItems="center" position="relative" mb={2}>
+            <Typography variant="h3" gutterBottom>
+              Learning Resources
+            </Typography>
+            <IconButton onClick={handleDrawerOpen} style={{ position: 'absolute', right: 20 }}>
+              <FolderOpenIcon />
+            </IconButton>
+          </Box>
+          <PdfGrid pdfFiles={pdfFiles} onChatWithMaruti={onChatWithMaruti} onDeletePdf={handlePdfDelete} /> {/* Use PdfGrid component */}
+          <Drawer anchor="right" open={drawerOpen} onClose={handleDrawerClose}>
+            <Box p={2} width={250}>
+              <form onSubmit={handleFormSubmit}>
+                <TextField
+                  select // Use select to create a dropdown
+                  label="Type"
+                  value={type}
+                  onChange={(e) => setType(e.target.value)}
+                  fullWidth
+                  margin="normal"
+                >
+                  {bookTypes.map((bookType) => (
+                    <MenuItem key={bookType} value={bookType}>
+                      {bookType}
+                    </MenuItem>
+                  ))}
+                </TextField>
 
-            <TextField label="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} fullWidth margin="normal" />
-            <TextField label="Filename" value={filename} onChange={(e) => setFilename(e.target.value)} fullWidth margin="normal" />
-            <Button variant="contained" component="label" fullWidth>
-              Choose File
-              <input type="file" hidden onChange={handleFileChange} />
-            </Button>
-            {pdfPreview && (
-              <Box mt={2} position="relative" display="flex" justifyContent="center">
-                <img src={pdfPreview} alt="PDF Preview" width="100" />
-                <IconButton onClick={handleRemovePreview} aria-label="remove" style={{ position: 'absolute', top: 0, right: 0 }}>
-                  <CloseIcon />
-                </IconButton>
-              </Box>
-            )}
-            {loading ? (
-              <>
-                <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} style={{ marginTop: '20px' }}>
-                  <CircularProgress value={uploadProgress} />
+                <TextField label="Subject" value={subject} onChange={(e) => setSubject(e.target.value)} fullWidth margin="normal" />
+                <TextField label="Filename" value={filename} onChange={(e) => setFilename(e.target.value)} fullWidth margin="normal" />
+                <Button variant="contained" component="label" fullWidth>
+                  Choose File
+                  <input type="file" hidden onChange={handleFileChange} />
                 </Button>
-                <Typography variant="body2" color="text.secondary">
-                  Uploading: {uploadProgress}%
-                </Typography>
-              </>
-            ) : (
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                fullWidth
-                disabled={!uploadedResource}
-                style={{ marginTop: '20px' }}
-              >
-                Upload
-              </Button>
-            )}
-          </form>
+                {pdfPreview && (
+                  <Box mt={2} position="relative" display="flex" justifyContent="center">
+                    <img src={pdfPreview} alt="PDF Preview" width="100" />
+                    <IconButton onClick={handleRemovePreview} aria-label="remove" style={{ position: 'absolute', top: 0, right: 0 }}>
+                      <CloseIcon />
+                    </IconButton>
+                  </Box>
+                )}
+                {loading ? (
+                  <>
+                    <Button type="submit" variant="contained" color="primary" fullWidth disabled={loading} style={{ marginTop: '20px' }}>
+                      <CircularProgress value={uploadProgress} />
+                    </Button>
+                    <Typography variant="body2" color="text.secondary">
+                      Uploading: {uploadProgress}%
+                    </Typography>
+                  </>
+                ) : (
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    disabled={!uploadedResource}
+                    style={{ marginTop: '20px' }}
+                  >
+                    Upload
+                  </Button>
+                )}
+              </form>
+            </Box>
+          </Drawer>
         </Box>
-      </Drawer>
-    </Box>
+      )}
+      ;
+    </>
   );
 };
 

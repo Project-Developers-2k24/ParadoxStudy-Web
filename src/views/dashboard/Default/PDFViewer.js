@@ -114,6 +114,7 @@ import { useNavigate } from 'react-router';
 import PdfGrid from 'ui-component/pdfgrid';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import LoadingParadox from 'views/utilities/LoadingParadox';
 
 const PassportPDFViewer = () => {
   const navigate = useNavigate();
@@ -160,7 +161,7 @@ const PassportPDFViewer = () => {
         </Typography>
       </Box> */}
       {loading ? (
-        <div>Loading...</div>
+         <LoadingParadox/>
       ) : (
         <PdfGrid pdfFiles={pdfFiles} onChatWithMaruti={handleChatWithMaruti}  onDeletePdf={handlePdfDelete}/>
       )}
