@@ -685,7 +685,7 @@ const ChatBot = () => {
       formData.append('page', page);
       formData.append('limit', 16);
 
-      const res = await axios.post('http://localhost:8000/api/user/getChats', formData);
+      const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getChats', formData);
       console.log(res.data);
       setChat(res.data.chats); // Assuming the chat data is returned in a property called "chats"
       setCurrentPage(res.data.currentPage);
