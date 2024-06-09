@@ -566,6 +566,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import MinimizeIcon from '@mui/icons-material/Minimize';
 import { px } from 'framer-motion';
+import LoadingParadox from 'views/utilities/LoadingParadox';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 const ChatBot = () => {
@@ -591,7 +592,10 @@ const ChatBot = () => {
   const [data, setData] = useState([]);
   const [userDataLoading, setUserDataLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isChatLoading, setIsChatLoading] = useState(false);
   const [messageInput, setMessageInput] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const isSmallScreen = useMediaQuery('(max-width:786px)');
 
   const getUser = async () => {
@@ -671,55 +675,84 @@ const ChatBot = () => {
     }
   };
 
-  const getChatData = async () => {
+  const getChatData = async (page) => {
     try {
+      console.log(currentPage);
       const formData = new FormData();
+      setIsChatLoading(true);
       formData.append('selected_book', pdfData.docs_name);
       formData.append('chatId', pdfData.userId);
+      formData.append('page', page);
+      formData.append('limit', 16);
 
-      const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getChats', formData);
+      const res = await axios.post('http://localhost:8000/api/user/getChats', formData);
       console.log(res.data);
       setChat(res.data.chats); // Assuming the chat data is returned in a property called "chats"
+      setCurrentPage(res.data.currentPage);
+      setTotalPages(res.data.totalPages);
+      setIsChatLoading(false);
     } catch (error) {
-      console.log(error);
+      setIsChatLoading(false);
+      console.error(error);
     }
   };
+  useEffect(() => {
+    // Scroll to the bottom of the page when the component initially renders
+    if (currentPage == 1) {
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  }, [messageHistory, currentPage]); // Empty dependency array ensures this effect runs only once
+  useEffect(() => {
+    // Function to handle scrolling to the top of the chat window
+    const handleScroll = () => {
+      const scrollTop = document.documentElement.scrollTop;
+      if (scrollTop === 0 && currentPage < totalPages) {
+        // If the user scrolls to the top and there are more pages available
+        setCurrentPage((prevPage) => prevPage + 1); // Update the current page to fetch more data
+      }
+    };
+
+    // Add event listener to detect scrolling
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      // Clean up event listener
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [currentPage, totalPages]);
 
   useEffect(() => {
-    getChatData();
-  }, []);
-  useEffect(() => {
-    // Scroll to the bottom of the page when message history changes
-    window.scrollTo(0, document.body.scrollHeight);
-  }, [messageHistory]);
+    // Fetch additional chat data when the current page changes
+    if (currentPage > 0) {
+      getChatData(currentPage);
+    }
+  }, [currentPage]);
 
   useEffect(() => {
     if (chat.length > 0) {
-      const formattedMessages = chat
-        // .filter((chatItem) => chatItem.text && chatItem.text.length > 0) // Filter out blank or irrelevant messages
-        .map((chatItem) => {
-          if (chatItem.type === 'bot') {
-            if (Array.isArray(chatItem.text) && chatItem.text.length === 0) {
-              return {
-                user: 'Maruti',
-                content: 'Please enter a relevant question.'
-              };
-            } else {
-              return {
-                user: 'Maruti',
-                content: Array.isArray(chatItem.text)
-                  ? chatItem.text.map((text) => ({ page: text.metadata.page, content: parse(text.page_content) }))
-                  : [{ page: chatItem.text.metadata.page, content: parse(chatItem.text.page_content) }]
-              };
-            }
+      const formattedMessages = chat.map((chatItem) => {
+        if (chatItem.type === 'bot') {
+          if (Array.isArray(chatItem.text) && chatItem.text.length === 0) {
+            return {
+              user: 'Maruti',
+              content: 'Please enter a relevant question.'
+            };
           } else {
             return {
-              user: 'You',
-              content: chatItem.text
+              user: 'Maruti',
+              content: Array.isArray(chatItem.text)
+                ? chatItem.text.map((text) => ({ page: text.metadata.page, content: parse(text.page_content) }))
+                : [{ page: chatItem.text.metadata.page, content: parse(chatItem.text.page_content) }]
             };
           }
-        });
-      setMessageHistory((prevMessages) => [...prevMessages, ...formattedMessages]);
+        } else {
+          return {
+            user: 'You',
+            content: chatItem.text
+          };
+        }
+      });
+      setMessageHistory((prevMessages) => [...formattedMessages, ...prevMessages]);
     }
   }, [chat]);
 
@@ -807,350 +840,361 @@ const ChatBot = () => {
   };
 
   return (
-    <div style={{ position: 'relative', backgroundColor: 'white', minHeight: '100vh', borderRadius: '10px', padding: '10px' }}>
-      <AppBar position="static" color="primary" sx={{ borderRadius: '10px', height: '50px', marginBottom: '10px' }}>
-        <Stack direction="row" alignItems="center">
-          {userDataLoading ? (
-            <Skeleton variant="cirlce" width={20} height={40} />
-          ) : (
-            <Avatar alt="Maruti" src={chatbot} sx={{ ml: '2px' }} />
-          )}
-          <Typography variant="h4" noWrap component="div" color="white" sx={{ p: 2 }}>
-            MARUTI :
-          </Typography>
-          <Typography variant="h3" noWrap component="div" color="purple" sx={{ p: 2 }}>
-            Sub - {pdfData.type} : File - {pdfData.filename}
-          </Typography>
-        </Stack>
-      </AppBar>
-      {/* <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ mt: 2, position: 'absolute', left: '0' }}>
-        <KeyboardArrowRightIcon />
-      </IconButton> */}
-      <Grid container spacing={1} sx={{ marginTop: '20px', marginBottom: '100px', flexDirection: 'row', justifyContent: 'center' }}>
-        {/* <Grid item xs={12} sm={open ? 3 : 2} md={2}>
-          <Paper style={{ height: '100vh', overflowY: 'auto', display: sidebarOpen ? 'block' : 'none' }}>
-          <Collapse in={sidebarOpen}>
-          <Button onClick={handleOpenPDF} variant="contained" color="primary">
-            Open PDF
-           </Button>
-            </Collapse>
-          </Paper>
-        </Grid> */}
+    <>
+      {isChatLoading && currentPage == 1 ? (
+        <LoadingParadox />
+      ) : (
+        <div style={{ position: 'relative', backgroundColor: 'white', minHeight: '100vh', borderRadius: '10px', padding: '10px' }}>
+          <AppBar position="static" color="primary" sx={{ borderRadius: '10px', height: '50px', marginBottom: '10px' }}>
+            <Stack direction="row" alignItems="center">
+              {userDataLoading ? (
+                <Skeleton variant="cirlce" width={20} height={40} />
+              ) : (
+                <Avatar alt="Maruti" src={chatbot} sx={{ ml: '2px' }} />
+              )}
+              <Typography variant="h4" noWrap component="div" color="white" sx={{ p: 2 }}>
+                MARUTI :
+              </Typography>
+              <Typography variant="h3" noWrap component="div" color="purple" sx={{ p: 2 }}>
+                Sub - {pdfData.type} : File - {pdfData.filename}
+              </Typography>
+            </Stack>
+          </AppBar>
+          {/* <IconButton onClick={() => setSidebarOpen(!sidebarOpen)} sx={{ mt: 2, position: 'absolute', left: '0' }}>
+      <KeyboardArrowRightIcon />
+    </IconButton> */}
+          <Grid container spacing={1} sx={{ marginTop: '20px', marginBottom: '100px', flexDirection: 'row', justifyContent: 'center' }}>
+            {/* <Grid item xs={12} sm={open ? 3 : 2} md={2}>
+        <Paper style={{ height: '100vh', overflowY: 'auto', display: sidebarOpen ? 'block' : 'none' }}>
+        <Collapse in={sidebarOpen}>
+        <Button onClick={handleOpenPDF} variant="contained" color="primary">
+          Open PDF
+         </Button>
+          </Collapse>
+        </Paper>
+      </Grid> */}
 
-        <Grid item xs={12} sm={open ? 9 : 10}>
-          <Paper style={{ height: '102%', overflowY: 'auto', borderRadius: '5px', backgroundColor: 'white' }}>
-            <List dense>
-              {messageHistory.map((message, index) => (
-                <React.Fragment key={index}>
-                  <ListItem sx={{ borderRadius: '10px', flexDirection: isSmallScreen ? 'column' : 'row' }}>
-                    {/* Display Maruti's avatar if the message is from Maruti */}
-                    {message.user === 'Maruti' && !isSmallScreen && (
-                      <ListItemAvatar>
-                        <Avatar
-                          alt="Maruti"
-                          src={chatbot}
-                          style={{
-                            height: '40px',
-                            width: '40px'
-                          }}
-                        />
-                      </ListItemAvatar>
-                    )}
-                    {message.user === 'Maruti' && isSmallScreen && (
-                      <ListItemAvatar>
-                        <Avatar
-                          alt="Maruti"
-                          src={chatbot}
-                          style={{
-                            height: '35px',
-                            width: '35px',
-                            justifyContent: 'flex-start',
-                            marginLeft: '-200%'
-                          }}
-                        />
-                      </ListItemAvatar>
-                    )}
-                    {/* Render message content */}
-                    <ListItemText
-                      primary={
-                        Array.isArray(message.content) ? (
-                          // If content is an array, map through it and display each text item in a Card component
-                          message.content.map((textItem, textIndex) => (
-                            <Card
-                              key={textIndex}
-                              sx={{
-                                backgroundColor: message.user === 'You' ? 'lightgrey' : 'lightgrey',
-                                marginBottom: 4, // Adjust margin for spacing between cards
-                                borderRadius: '10px'
-                                // marginLeft:"10%"
-                              }}
-                            >
-                              <CardContent>
-                                {/* Display page number and content */}
-                                <Typography variant="subtitle2" color="textSecondary" gutterBottom>
-                                  Page {textItem.page}
-                                </Typography>
-                                <Typography variant="body1">{textItem.content}</Typography>
-                              </CardContent>
-                            </Card>
-                          ))
-                        ) : (
-                          <>
-                            <div
+            <Grid item xs={12} sm={open ? 9 : 10}>
+              <Paper style={{ height: '102%', overflowY: 'auto', borderRadius: '5px', backgroundColor: 'white' }}>
+                {isChatLoading && (
+                  <div style={{ textAlign: 'center', margin: '10px' }}>
+                    <CircularProgress color="primary" />
+                  </div>
+                )}
+                <List dense>
+                  {messageHistory.map((message, index) => (
+                    <React.Fragment key={index}>
+                      <ListItem sx={{ borderRadius: '10px', flexDirection: isSmallScreen ? 'column' : 'row' }}>
+                        {/* Display Maruti's avatar if the message is from Maruti */}
+                        {message.user === 'Maruti' && !isSmallScreen && (
+                          <ListItemAvatar>
+                            <Avatar
+                              alt="Maruti"
+                              src={chatbot}
                               style={{
-                                display: 'flex',
-                                flexDirection: message.user === 'You' ? 'row' : 'column',
-                                width: isSmallScreen && message.user === 'You' ? '320px' : '100%',
-                                gap: '3%'
+                                height: '40px',
+                                width: '40px'
                               }}
-                            >
-                              <Card
-                                sx={{
-                                  backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
-                                  marginBottom: 1.5, // Adjust margin for spacing between cards
-                                  borderRadius: '10px',
-                                  maxWidth: message.user === 'You' ? '100%' : '70%',
-                                  width: message.user === 'You' ? '100%' : '70%',
-                                  marginLeft: message.user === 'You' ? (isSmallScreen ? '30%' : '50%') : '50%'
-                                  // marginRight: message.user === 'You' ? '0%' : '20%'
-                                }}
-                              >
-                                <CardContent>
-                                  <Typography variant={isSmallScreen ? 'h6' : 'h4'} sx={{ color: 'white' }}>
-                                    {/* <div dangerouslySetInnerHTML={{ __html: message.content }} /> */}
-                                    {message.content}
-                                  </Typography>
-                                </CardContent>
-                              </Card>
+                            />
+                          </ListItemAvatar>
+                        )}
+                        {message.user === 'Maruti' && isSmallScreen && (
+                          <ListItemAvatar>
+                            <Avatar
+                              alt="Maruti"
+                              src={chatbot}
+                              style={{
+                                height: '35px',
+                                width: '35px',
+                                justifyContent: 'flex-start',
+                                marginLeft: '-200%'
+                              }}
+                            />
+                          </ListItemAvatar>
+                        )}
+                        {/* Render message content */}
+                        <ListItemText
+                          primary={
+                            Array.isArray(message.content) ? (
+                              // If content is an array, map through it and display each text item in a Card component
+                              message.content.map((textItem, textIndex) => (
+                                <Card
+                                  key={textIndex}
+                                  sx={{
+                                    backgroundColor: message.user === 'You' ? 'lightgrey' : 'lightgrey',
+                                    marginBottom: 4, // Adjust margin for spacing between cards
+                                    borderRadius: '10px'
+                                    // marginLeft:"10%"
+                                  }}
+                                >
+                                  <CardContent>
+                                    {/* Display page number and content */}
+                                    <Typography variant="subtitle2" color="textSecondary" gutterBottom>
+                                      Page {textItem.page}
+                                    </Typography>
+                                    <Typography variant="body1">{textItem.content}</Typography>
+                                  </CardContent>
+                                </Card>
+                              ))
+                            ) : (
                               <>
-                                {
-                                  message.user === 'You' ? (
-                                    <Stack direction="row" justifyContent="center" alignItems="center">
-                                      <ListItemAvatar>
-                                        <div
-                                          style={{
-                                            marginLeft: '12px',
-                                            flexDirection: 'row',
-                                            justifyContent: 'center'
-                                          }}
-                                        >
-                                          {userDataLoading ? (
-                                            <Skeleton variant="cirlce" width={20} height={40} />
-                                          ) : (
-                                            <>
-                                              {isSmallScreen ? (
-                                                <Avatar
-                                                  sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '20px' }}
-                                                  style={{
-                                                    height: '35px',
-                                                    width: '35px'
-                                                  }}
-                                                  src={data.data.avatar ? data.data.avatar : null}
-                                                />
+                                <div
+                                  style={{
+                                    display: 'flex',
+                                    flexDirection: message.user === 'You' ? 'row' : 'column',
+                                    width: isSmallScreen && message.user === 'You' ? '320px' : '100%',
+                                    gap: '3%'
+                                  }}
+                                >
+                                  <Card
+                                    sx={{
+                                      backgroundColor: message.user === 'You' ? 'Black' : 'lightgrey',
+                                      marginBottom: 1.5, // Adjust margin for spacing between cards
+                                      borderRadius: '10px',
+                                      maxWidth: message.user === 'You' ? '100%' : '70%',
+                                      width: message.user === 'You' ? '100%' : '70%',
+                                      marginLeft: message.user === 'You' ? (isSmallScreen ? '30%' : '50%') : '50%'
+                                      // marginRight: message.user === 'You' ? '0%' : '20%'
+                                    }}
+                                  >
+                                    <CardContent>
+                                      <Typography variant={isSmallScreen ? 'h6' : 'h4'} sx={{ color: 'white' }}>
+                                        {/* <div dangerouslySetInnerHTML={{ __html: message.content }} /> */}
+                                        {message.content}
+                                      </Typography>
+                                    </CardContent>
+                                  </Card>
+                                  <>
+                                    {
+                                      message.user === 'You' ? (
+                                        <Stack direction="row" justifyContent="center" alignItems="center">
+                                          <ListItemAvatar>
+                                            <div
+                                              style={{
+                                                marginLeft: '12px',
+                                                flexDirection: 'row',
+                                                justifyContent: 'center'
+                                              }}
+                                            >
+                                              {userDataLoading ? (
+                                                <Skeleton variant="cirlce" width={20} height={40} />
                                               ) : (
-                                                <Avatar
-                                                  sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '20px' }}
-                                                  style={{
-                                                    height: '40px',
-                                                    width: '40px'
-                                                  }}
-                                                  src={data.data.avatar ? data.data.avatar : null}
-                                                />
+                                                <>
+                                                  {isSmallScreen ? (
+                                                    <Avatar
+                                                      sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '20px' }}
+                                                      style={{
+                                                        height: '35px',
+                                                        width: '35px'
+                                                      }}
+                                                      src={data.data.avatar ? data.data.avatar : null}
+                                                    />
+                                                  ) : (
+                                                    <Avatar
+                                                      sx={{ bgcolor: grey[400], color: 'whitesmoke', fontSize: '20px' }}
+                                                      style={{
+                                                        height: '40px',
+                                                        width: '40px'
+                                                      }}
+                                                      src={data.data.avatar ? data.data.avatar : null}
+                                                    />
+                                                  )}
+                                                </>
                                               )}
-                                            </>
-                                          )}
-                                        </div>
-                                        {userDataLoading ? (
-                                          <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
-                                            <Skeleton variant="text" />
-                                          </Typography>
-                                        ) : (
-                                          <Typography
-                                            variant="body1"
-                                            sx={{ whiteSpace: 'pre-wrap', color: 'black', fontSize: isSmallScreen ? '10px' : '15px' }}
-                                          >
-                                            {data.data.username}
-                                          </Typography>
-                                        )}
-                                      </ListItemAvatar>
-                                    </Stack>
-                                  ) : null // If the message is not from the user, secondary content is null
-                                }
+                                            </div>
+                                            {userDataLoading ? (
+                                              <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', color: 'black' }}>
+                                                <Skeleton variant="text" />
+                                              </Typography>
+                                            ) : (
+                                              <Typography
+                                                variant="body1"
+                                                sx={{ whiteSpace: 'pre-wrap', color: 'black', fontSize: isSmallScreen ? '10px' : '15px' }}
+                                              >
+                                                {data.data.username}
+                                              </Typography>
+                                            )}
+                                          </ListItemAvatar>
+                                        </Stack>
+                                      ) : null // If the message is not from the user, secondary content is null
+                                    }
+                                  </>
+                                </div>
                               </>
-                            </div>
-                          </>
-                          // If content is not an array, render it as a Typography component
-                        )
-                      }
-                      sx={{
-                        // Align text based on the message sender
-                        textAlign: message.user === 'You' ? 'right' : 'left',
-                        color: 'black',
-                        borderRadius: '10px'
-                      }}
-                    />
-                    {/* Display delete button for messages from the user */}
-                    {message.user === 'You' && (
-                      <ListItemSecondaryAction>
-                        <IconButton aria-label="delete"></IconButton>
-                      </ListItemSecondaryAction>
-                    )}
-                  </ListItem>
-                </React.Fragment>
-              ))}
-            </List>
+                              // If content is not an array, render it as a Typography component
+                            )
+                          }
+                          sx={{
+                            // Align text based on the message sender
+                            textAlign: message.user === 'You' ? 'right' : 'left',
+                            color: 'black',
+                            borderRadius: '10px'
+                          }}
+                        />
+                        {/* Display delete button for messages from the user */}
+                        {message.user === 'You' && (
+                          <ListItemSecondaryAction>
+                            <IconButton aria-label="delete"></IconButton>
+                          </ListItemSecondaryAction>
+                        )}
+                      </ListItem>
+                    </React.Fragment>
+                  ))}
+                </List>
 
-            {isLoading && ( // Show loading indicator when isLoading is true
-              <Lottie loop animationData={lottieJson} play style={{ width: 150, height: 150 }} />
-            )}
-          </Paper>
+                {isLoading && ( // Show loading indicator when isLoading is true
+                  <Lottie loop animationData={lottieJson} play style={{ width: 150, height: 150 }} />
+                )}
+              </Paper>
 
-          {/* <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="center"
-            position="fixed" // Fixed position
-            bottom={0} // Stick to the bottom
-            width={isSmallScreen ? '83%' : '69%'} // Full width
-            marginRight={20}
-            zIndex={999} // Ensure it's above other content
-            backgroundColor="white"
-            borderRadius={10}
-            padding={2} // Add padding for better spacing
-            sx={{
-              '@media (max-width: 600px)': {
-                // Adjust stack direction for small screens
-                flexDirection: 'column'
+              {/* <Stack
+          direction="row"
+          alignItems="center"
+          justifyContent="center"
+          position="fixed" // Fixed position
+          bottom={0} // Stick to the bottom
+          width={isSmallScreen ? '83%' : '69%'} // Full width
+          marginRight={20}
+          zIndex={999} // Ensure it's above other content
+          backgroundColor="white"
+          borderRadius={10}
+          padding={2} // Add padding for better spacing
+          sx={{
+            '@media (max-width: 600px)': {
+              // Adjust stack direction for small screens
+              flexDirection: 'column'
+            }
+          }}
+        >
+          <Button onClick={handleOpenDialog} variant="contained" color="primary"
+           style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: '10px',
+            zIndex: '1000'
+          }}
+          >
+          Open PDF
+        </Button>
+          <TextField
+            variant="outlined"
+            placeholder="Enter your query"
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                sendMessage(messageInput);
               }
             }}
-          >
-            <Button onClick={handleOpenDialog} variant="contained" color="primary"
-             style={{
-              position: 'fixed',
-              bottom: '20px',
-              left: '10px',
-              zIndex: '1000'
-            }}
-            >
-            Open PDF
-          </Button>
-            <TextField
-              variant="outlined"
-              placeholder="Enter your query"
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  sendMessage(messageInput);
-                }
-              }}
-              fullWidth
-              
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
-                      {isLoading ? <CircularProgress /> : <SendIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-              
-              sx={{
-                '& .MuiInputBase-root': {
-                  borderRadius: '10px',
-                  backgroundColor: 'white'
-                },
-                '& .Mui-focused fieldset': {
-                  borderColor: 'white'
-                }
-              }}
-
-            />
+            fullWidth
             
-          </Stack> */}
-          <Stack
-            direction={isSmallScreen ? 'column' : 'row'}
-            alignItems="center"
-            justifyContent="center"
-            position="fixed"
-            bottom={0}
-            width={isSmallScreen ? '100%' : '69%'}
-            padding={2}
-            zIndex={999}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
+                    {isLoading ? <CircularProgress /> : <SendIcon />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+            
             sx={{
-              '@media (max-width: 600px)': {
-                flexDirection: 'column'
+              '& .MuiInputBase-root': {
+                borderRadius: '10px',
+                backgroundColor: 'white'
+              },
+              '& .Mui-focused fieldset': {
+                borderColor: 'white'
               }
             }}
-          >
-            <Button
-              onClick={handleOpenDialog}
-              variant="contained"
-              color="primary"
-              size="small" // Reduce button size
-              sx={{ marginRight: isSmallScreen ? 50 : 2 }} // Adjust margin for smaller screens
-            >
-              Open PDF
-            </Button>
-            <TextField
-              variant="outlined"
-              placeholder="Enter your query"
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  sendMessage(messageInput);
-                }
-              }}
-              fullWidth
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
-                      {isLoading ? <CircularProgress size={24} /> : <SendIcon />}
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-              sx={{
-                '& .MuiInputBase-root': {
-                  borderRadius: '10px',
-                  backgroundColor: 'white'
-                },
-                '& .Mui-focused fieldset': {
-                  borderColor: 'white'
-                }
-              }}
-            />
-          </Stack>
-        </Grid>
-      </Grid>
 
-      <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {pdfData.docs_name}
-          <IconButton onClick={handleCloseDialog} sx={{ position: 'absolute', right: 6, top: 6 }}>
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent sx={{ width: isSmallScreen ? '90vw' : '80vw', height: isSmallScreen ? '70vh' : '80vh' }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-            <IconButton onClick={handleZoomIn}>
-              <ZoomInIcon />
-            </IconButton>
-            <IconButton onClick={handleZoomOut}>
-              <ZoomOutIcon />
-            </IconButton>
-          </Stack>
-          <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
-            {Array.from(new Array(numPages), (el, index) => (
-              <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
-            ))}
-          </Document>
-        </DialogContent>
-      </Dialog>
-    </div>
+          />
+          
+        </Stack> */}
+              <Stack
+                direction={isSmallScreen ? 'column' : 'row'}
+                alignItems="center"
+                justifyContent="center"
+                position="fixed"
+                bottom={0}
+                width={isSmallScreen ? '100%' : '69%'}
+                padding={2}
+                zIndex={999}
+                sx={{
+                  '@media (max-width: 600px)': {
+                    flexDirection: 'column'
+                  }
+                }}
+              >
+                <Button
+                  onClick={handleOpenDialog}
+                  variant="contained"
+                  color="primary"
+                  size="small" // Reduce button size
+                  sx={{ marginRight: isSmallScreen ? 50 : 2 }} // Adjust margin for smaller screens
+                >
+                  Open PDF
+                </Button>
+                <TextField
+                  variant="outlined"
+                  placeholder="Enter your query"
+                  value={messageInput}
+                  onChange={(e) => setMessageInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      sendMessage(messageInput);
+                    }
+                  }}
+                  fullWidth
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
+                          {isLoading ? <CircularProgress size={24} /> : <SendIcon />}
+                        </IconButton>
+                      </InputAdornment>
+                    )
+                  }}
+                  sx={{
+                    '& .MuiInputBase-root': {
+                      borderRadius: '10px',
+                      backgroundColor: 'white'
+                    },
+                    '& .Mui-focused fieldset': {
+                      borderColor: 'white'
+                    }
+                  }}
+                />
+              </Stack>
+            </Grid>
+          </Grid>
+
+          <Dialog open={dialogOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+            <DialogTitle>
+              {pdfData.docs_name}
+              <IconButton onClick={handleCloseDialog} sx={{ position: 'absolute', right: 6, top: 6 }}>
+                <CloseIcon />
+              </IconButton>
+            </DialogTitle>
+            <DialogContent sx={{ width: isSmallScreen ? '90vw' : '80vw', height: isSmallScreen ? '70vh' : '80vh' }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
+                <IconButton onClick={handleZoomIn}>
+                  <ZoomInIcon />
+                </IconButton>
+                <IconButton onClick={handleZoomOut}>
+                  <ZoomOutIcon />
+                </IconButton>
+              </Stack>
+              <Document file={pdfData.docs_url} onLoadSuccess={onDocumentLoadSuccess}>
+                {Array.from(new Array(numPages), (el, index) => (
+                  <Page key={`page_${index + 1}`} pageNumber={index + 1} scale={zoomLevel} renderTextLayer={false} />
+                ))}
+              </Document>
+            </DialogContent>
+          </Dialog>
+        </div>
+      )}
+    </>
   );
 };
 
