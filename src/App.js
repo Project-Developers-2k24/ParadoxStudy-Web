@@ -14,8 +14,9 @@ import { ToastContainer } from 'react-toastify';
 import { gapi } from 'gapi-script';
 import { useEffect } from 'react';
 import { GoogleConfig } from 'views/utilities/Config';
+import { QueryClient, QueryClientProvider } from 'react-query';
 // ==============================|| APP ||============================== //
-
+const queryClient = new QueryClient();
 const App = () => {
   const customization = useSelector((state) => state.customization);
   useEffect(() => {
@@ -33,7 +34,9 @@ const App = () => {
         <CssBaseline />
         <NavigationScroll>
           <ToastContainer />
-          <Routes />
+          <QueryClientProvider client={queryClient}>
+            <Routes />
+          </QueryClientProvider>
         </NavigationScroll>
       </ThemeProvider>
     </StyledEngineProvider>
