@@ -517,7 +517,7 @@ import {
   CircularProgress,
   MenuItem
 } from '@mui/material';
-import Lottie from 'react-lottie-player';
+
 import loadingJson from '../../utils/paradoxLoader.json';
 import { pdfjs } from 'react-pdf';
 import { useNavigate } from 'react-router';
@@ -529,6 +529,7 @@ import { toast } from 'react-toastify';
 import PdfGrid from 'ui-component/pdfgrid'; // Import the PdfGrid component
 import { bookTypes } from 'api/Books';
 import LoadingParadox from 'views/utilities/LoadingParadox';
+import { useQuery } from 'react-query';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -539,31 +540,25 @@ const ResourceViewer = () => {
   const [type, setType] = useState('');
   const [filename, setFilename] = useState('');
   const [uploadedResource, setUploadedResource] = useState(null);
-  const [pdfFiles, setPdfFiles] = useState([]);
+  // const [pdfFiles, setPdfFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [pdfPreview, setPdfPreview] = useState(null);
 
-  useEffect(() => {
-    const getPdfData = async () => {
-      setLoading(true);
-      try {
-        const formData = new FormData();
-        const id = localStorage.getItem('userId');
-        formData.append('userId', id);
+  const {
+    data: pdfFiles = [],
+    isLoading,
+    isError,
+    error,
+    refetch
+  } = useQuery('pdfData', async () => {
+    const formData = new FormData();
+    const id = localStorage.getItem('userId');
+    formData.append('userId', id);
 
-        const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
-        setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
-        console.log(res.data.data);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getPdfData();
-  }, []);
+    const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
+    return res.data.data; // Assuming res.data.data contains the array of PDF data
+  });
 
   const handleViewPDF = (r) => {
     setUploadedResource(r.docs_url);
@@ -707,8 +702,8 @@ const ResourceViewer = () => {
 
   return (
     <>
-      {loading ? (
-         <LoadingParadox/>
+      {isLoading ? (
+        <LoadingParadox />
       ) : (
         <Box style={{ mt: '2px' }}>
           <Box width="100%" display="flex" justifyContent="center" alignItems="center" position="relative" mb={2}>

@@ -567,6 +567,7 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import MinimizeIcon from '@mui/icons-material/Minimize';
 import { px } from 'framer-motion';
 import LoadingParadox from 'views/utilities/LoadingParadox';
+import { useQuery } from 'react-query';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 const ChatBot = () => {
@@ -583,6 +584,7 @@ const ChatBot = () => {
     alert('Code copied to clipboard!');
   }
 
+
   const pdfData = location.state ? location.state.pdfData : null;
 
   const [chat, setChat] = useState([]);
@@ -592,7 +594,7 @@ const ChatBot = () => {
   const [data, setData] = useState([]);
   const [userDataLoading, setUserDataLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isChatLoading, setIsChatLoading] = useState(false);
+  // const [isChatLoading, setIsChatLoading] = useState(false);
   const [messageInput, setMessageInput] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -676,26 +678,35 @@ const ChatBot = () => {
   };
 
   const getChatData = async (page) => {
-    try {
-      console.log(currentPage);
-      const formData = new FormData();
-      setIsChatLoading(true);
-      formData.append('selected_book', pdfData.docs_name);
-      formData.append('chatId', pdfData.userId);
-      formData.append('page', page);
-      formData.append('limit', 16);
+    const formData = new FormData();
+    formData.append('selected_book', pdfData.docs_name);
+    formData.append('chatId', pdfData.userId);
+    formData.append('page', page);
+    formData.append('limit', 16);
 
-      const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getChats', formData);
-      console.log(res.data);
-      setChat(res.data.chats); // Assuming the chat data is returned in a property called "chats"
-      setCurrentPage(res.data.currentPage);
-      setTotalPages(res.data.totalPages);
-      setIsChatLoading(false);
-    } catch (error) {
-      setIsChatLoading(false);
-      console.error(error);
-    }
+    const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getChats', formData);
+    return res.data;
   };
+
+  const { data: chatData, isLoading: isChatLoading,
+     error: chatError, refetch: refetchChat } = useQuery(
+    ['chatData', currentPage], // Query key, including currentPage as a dependency
+    () => getChatData(currentPage), // Fetch function
+    {
+      enabled: !!pdfData, // Enable the query only if pdfData exists
+      refetchOnWindowFocus: false, // Disable automatic refetching on window focus
+    }
+  );
+
+  useEffect(() => {
+    // Update local state or perform other actions based on chatData, isChatLoading, or chatError
+    if (chatData) {
+      setChat(chatData.chats); // Assuming chat data is stored in 'chats' property
+      setCurrentPage(chatData.currentPage);
+      setTotalPages(chatData.totalPages);
+    }
+  }, [chatData, isChatLoading, chatError]); // Dependency array to watch for changes
+
   useEffect(() => {
     // Scroll to the bottom of the page when the component initially renders
     if (currentPage == 1) {
@@ -724,6 +735,7 @@ const ChatBot = () => {
   useEffect(() => {
     // Fetch additional chat data when the current page changes
     if (currentPage > 0) {
+
       getChatData(currentPage);
     }
   }, [currentPage]);
