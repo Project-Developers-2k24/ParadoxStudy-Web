@@ -584,7 +584,6 @@ const ChatBot = () => {
     alert('Code copied to clipboard!');
   }
 
-
   const pdfData = location.state ? location.state.pdfData : null;
 
   const [chat, setChat] = useState([]);
@@ -688,13 +687,17 @@ const ChatBot = () => {
     return res.data;
   };
 
-  const { data: chatData, isLoading: isChatLoading,
-     error: chatError, refetch: refetchChat } = useQuery(
+  const {
+    data: chatData,
+    isLoading: isChatLoading,
+    error: chatError,
+    refetch: refetchChat
+  } = useQuery(
     ['chatData', currentPage], // Query key, including currentPage as a dependency
     () => getChatData(currentPage), // Fetch function
     {
       enabled: !!pdfData, // Enable the query only if pdfData exists
-      refetchOnWindowFocus: false, // Disable automatic refetching on window focus
+      refetchOnWindowFocus: false // Disable automatic refetching on window focus
     }
   );
 
@@ -735,7 +738,6 @@ const ChatBot = () => {
   useEffect(() => {
     // Fetch additional chat data when the current page changes
     if (currentPage > 0) {
-
       getChatData(currentPage);
     }
   }, [currentPage]);
