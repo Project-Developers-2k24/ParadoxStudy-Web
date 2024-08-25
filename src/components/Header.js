@@ -3,7 +3,7 @@ const Header = () => {
     return (
         <>
             <div className="header">
-                <p>changes</p>
+                <p>hellow changes</p>
             </div>
         </>
     );
