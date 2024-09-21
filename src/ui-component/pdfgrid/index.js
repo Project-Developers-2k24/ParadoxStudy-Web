@@ -10,21 +10,25 @@ const PdfGrid = ({ pdfFiles, onChatWithMaruti, onDeletePdf }) => {
       {pdfFiles.map((resource, index) => (
         <Grid key={`pdf_${index}`} item xs={12} sm={6} md={3} container direction="column" alignItems="center">
           <Typography variant="h6" align="center" style={{ marginTop: '10px', marginBottom: '10px' }}>
-                {resource.subject}
-              </Typography>
-          <Card style={{ width: '200px', height: '200px', border: '2px solid #ccc', borderColor: '#e0e0e0', position: 'relative' }}>
-          
+            {resource.subject}
+          </Typography>
+          <Card
+            style={{
+              width: '200px',
+              height: '200px',
+              border: '2px solid #e0e0e0',
+              position: 'relative'
+            }}
+          >
             <CardContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: 0 }}>
-           
-              <Document file={resource.docs_url}>
+              <Document file={resource.docs_url} onLoadError={(error) => console.error('Error loading document:', error)}>
                 <Page pageNumber={1} width={160} height={160} renderTextLayer={false} />
               </Document>
-              
             </CardContent>
             <IconButton
               onClick={() => onDeletePdf(resource)}
               aria-label="delete"
-              style={{ position: 'absolute', top: '3px', right: '3px', zIndex: -0.5 }}
+              style={{ position: 'absolute', top: '3px', right: '3px', zIndex: 1 }}
             >
               <DeleteIcon />
             </IconButton>

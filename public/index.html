@@ -7,16 +7,16 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta name="theme-color" content="#2296f3" />
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
     <meta name="title" content="Paradox Study: Curated Notes & Learning Resources to Unlock Your Learning Potential" />
     <meta
-      name="description"
-      content="Paradox Study provides curated notes, resources & insights to empower students, educators & lifelong learners. Fuel your curiosity, ignite your passion & excel in your academic journey."
-    />
+      name="description"
+      content="Paradox Study provides curated notes, resources & insights to empower students, educators & lifelong learners. Fuel your curiosity, ignite your passion & excel in your academic journey."
+    />
     <meta
-      name="keywords"
-      content="paradoxstudy, study resources, curated notes, online learning platform, academic resources, educational resources, chatbot learning, interactive learning, book query chatbot"
-    />
+      name="keywords"
+      content="paradoxstudy, study resources, curated notes, online learning platform, academic resources, educational resources, chatbot learning, interactive learning, book query chatbot"
+    />
     <meta name="google-site-verification" content="6-ZHts2IC6sos6I_S2Kxs4pmnPQh22JOiySScuygveQ" />
     <meta name="author" content="CodedThemes" />
     <meta property="og:locale" content="en_US" />
@@ -25,15 +25,18 @@
     <meta property="og:site_name" content="paradoxstudy.me" />
     <meta property="article:publisher" content="https://paradoxstudy.me/" />
     <meta property="og:title" content="Paradox Study: Curated Notes & Learning Resources to Unlock Your Learning Potential" />
-    <meta property="og:description" content="Paradox Study provides curated notes, resources & insights to empower students, educators & lifelong learners. Fuel your curiosity, ignite your passion & excel in your academic journey." />
+    <meta
+      property="og:description"
+      content="Paradox Study provides curated notes, resources & insights to empower students, educators & lifelong learners. Fuel your curiosity, ignite your passion & excel in your academic journey."
+    />
     <meta property="og:image" content="https://res.cloudinary.com/dcufd9un6/image/upload/v1713671201/Business_Event_Website_zss6a8.png" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://paradoxstudy.me/" />
     <meta property="twitter:title" content="Paradox Study - Curated Notes & Learning Resources to Unlock Your Learning Potential" />
     <meta
-      property="twitter:description"
-      content="Paradox Study provides curated notes, resources & insights to empower students, educators & lifelong learners. Fuel your curiosity, ignite your passion & excel in your academic journey."
-    />
+      property="twitter:description"
+      content="Paradox Study provides curated notes, resources & insights to empower students, educators & lifelong learners. Fuel your curiosity, ignite your passion & excel in your academic journey."
+    />
     <meta
       property="twitter:image"
       content="https://res.cloudinary.com/dcufd9un6/image/upload/v1713671201/Business_Event_Website_zss6a8.png"
@@ -44,12 +47,32 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap"
       rel="stylesheet"
     />
-    <script defer="defer" src="/static/js/main.60cf9304.js"></script>
-    <link href="/static/css/main.d930e23b.css" rel="stylesheet" />
-    
+    <!-- <script defer="defer" src="/static/js/main.60cf9304.js"></script>
+    <link href="/static/css/main.d930e23b.css" rel="stylesheet" /> -->
+
+    <script>
+      function copyCode(button) {
+        const codeBlock = button.parentElement.nextElementSibling.firstElementChild;
+        const range = document.createRange();
+        range.selectNodeContents(codeBlock);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
+        selection.removeAllRanges();
+        alert('Code copied to clipboard!');
+      }
+    </script>
   </head>
+
   <body>
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ startOnLoad: true });
+    </script>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+    <!-- Place your Mermaid diagrams here -->
   </body>
 </html>
