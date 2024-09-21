@@ -15,10 +15,22 @@ import { gapi } from 'gapi-script';
 import { useEffect } from 'react';
 import { GoogleConfig } from 'views/utilities/Config';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import mermaid from 'mermaid';
 // ==============================|| APP ||============================== //
 const queryClient = new QueryClient();
 const App = () => {
   const customization = useSelector((state) => state.customization);
+  // useEffect(() => {
+  //   import("https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs").then(
+  //     (mermaid) => {
+  //       mermaid.initialize({ startOnLoad: true });
+  //     }
+  //   );
+  // }, []);
+  useEffect(() => {
+    mermaid.initialize({ startOnLoad: true });
+    mermaid.contentLoaded(); // Initializes Mermaid after the content is loaded
+  }, []);
   useEffect(() => {
     function start() {
       gapi.client.init({
