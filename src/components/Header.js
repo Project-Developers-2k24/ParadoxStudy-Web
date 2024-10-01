@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 const Header = () => {
-    return (
-        <>
-            <div className="header">
-                <p>suppose if any page have header then it will come here</p>
-            </div>
-        </>
-    );
-}
+  return (
+    <>
+      <div className="header">
+        <p>hellow changes</p>
+      </div>
+    </>
+  );
+};
 
 export default Header;
