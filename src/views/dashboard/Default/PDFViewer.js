@@ -149,8 +149,8 @@ const PassportPDFViewer = () => {
       }
     });
   };
-  const handlePdfDelete=()=>{
-    
+  const handlePdfDelete = () => {
+
   }
 
   return (
@@ -161,9 +161,9 @@ const PassportPDFViewer = () => {
         </Typography>
       </Box> */}
       {loading ? (
-         <LoadingParadox/>
+        <LoadingParadox />
       ) : (
-        <PdfGrid pdfFiles={pdfFiles} onChatWithMaruti={handleChatWithMaruti}  onDeletePdf={handlePdfDelete}/>
+        <PdfGrid pdfFiles={pdfFiles} onChatWithMaruti={handleChatWithMaruti} onDeletePdf={handlePdfDelete} />
       )}
     </div>
   );
