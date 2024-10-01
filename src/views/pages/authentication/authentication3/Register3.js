@@ -44,7 +44,7 @@ const Register = () => {
                         <Grid item>
                           <Stack alignItems="center" justifyContent="center" spacing={1}>
 
-                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
+                            <Typography color={theme.palette.secondary.main} gutterBottom variant={matchDownSM ? 'h3' : 'h2'} >
                               Sign up
                             </Typography>
                             <Typography variant="caption" fontSize="16px" textAlign={matchDownSM ? 'center' : 'inherit'}>

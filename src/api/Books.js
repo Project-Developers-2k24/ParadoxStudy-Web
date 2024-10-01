@@ -1,0 +1,1 @@
+export const bookTypes = ['Novel', 'Literature', 'Research', 'Notes', 'Study Books', 'HelpBooks'];
