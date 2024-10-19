@@ -50,7 +50,7 @@ const ResourceViewer = () => {
     const id = localStorage.getItem('userId');
     formData.append('userId', id);
 
-    const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
+    const res = await axios.post('http://localhost:8000/api/user/getAllData', formData);
     if (res.data && res.data.data) {
       return res.data.data; // Assuming res.data.data contains the array of PDF data
     } else {
@@ -125,7 +125,7 @@ const ResourceViewer = () => {
         throw new Error('No token found');
       }
 
-      const res = await axios.delete('https://projectdev2114.azurewebsites.net/api/user/deleteBook', {
+      const res = await axios.delete('http://localhost:8000/api/user/deleteBook', {
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -181,7 +181,7 @@ const ResourceViewer = () => {
       formData.append('chatId', id); // Append chat ID
 
       try {
-        const response = await axios.post('https://projectdev2114.azurewebsites.net/api/user/upload', formData, {
+        const response = await axios.post('http://localhost:8000/api/user/upload', formData, {
           headers: {
             'Content-Type': 'multipart/form-data' // Set the content type to multipart/form-data
           },

@@ -33,7 +33,7 @@
 
 //   // const getchat = async () => {
 //   //   try {
-//   //     const res = await axios.get('https://projectdev2114.azurewebsites.net/api/user/wakeUp');
+//   //     const res = await axios.get('http://localhost:8000/api/user/wakeUp');
 //   //     console.log(res.data);
 //   //   } catch (error) {
 //   //     console.log(error);
