@@ -144,7 +144,7 @@ const ChatBot = () => {
       formData.append('question', message);
       formData.append('selected_book', pdfData.docs_name);
       formData.append('chatId', pdfData.userId);
-      const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/ask', formData);
+      const res = await axios.post('http://localhost:8000/api/user/ask', formData);
       console.log(res.data);
 
       // Simulate typing delay before showing bot's response
@@ -186,7 +186,7 @@ const ChatBot = () => {
     formData.append('page', page);
     formData.append('limit', 16);
 
-    const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getChats', formData);
+    const res = await axios.post('http://localhost:8000/api/user/getChats', formData);
     return res.data;
   };
 
