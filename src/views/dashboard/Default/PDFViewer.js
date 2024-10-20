@@ -129,7 +129,7 @@ const PassportPDFViewer = () => {
         const formData = new FormData();
         formData.append('userId', id);
 
-        const res = await axios.post('http://localhost:8000/api/user/getAllData', formData);
+        const res = await axios.post('https://projectdev2114.azurewebsites.net/api/user/getAllData', formData);
         setPdfFiles(res.data.data); // Assuming res.data.data contains the array of PDF data
       } catch (error) {
         console.log(error);
