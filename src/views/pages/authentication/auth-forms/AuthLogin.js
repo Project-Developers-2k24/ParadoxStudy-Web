@@ -21,6 +21,7 @@ import {
   Typography
   // useMediaQuery
 } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google'; 
 import { GoogleLogin } from 'react-google-login';
 // third party
 import * as Yup from 'yup';
@@ -47,16 +48,40 @@ const FirebaseLogin = ({ ...others }) => {
   // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const onSuccess = (response) => {
-    console.log('Login Successful:', response.profileObj);
-    // localStorage.setItem('users', JSON.stringify(response.profileObj));
-    // navigation("/orderDetails");
-    // toast.success("Login Successful: "+ response.profileObj.name)
+  const onSuccess = async (response) => {
+    setLoading(true);
+
+    // Open the Google authentication URL in a new window
+    const popup = window.open('http://localhost:8000/api/user/google', 'GoogleLogin', 'width=600,height=600');
+  
+    // Listen for messages from the popup window
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'http://localhost:8000') return; // Replace with your backend URL
+  
+      const responseData = event.data; // Get the data sent from the backend
+  
+      if (responseData.status) {
+        // Successfully logged in
+        console.log('User Data:', responseData.user); // Log the user data from the response
+        localStorage.setItem('token', responseData.token); 
+        // Store the token
+        localStorage.setItem('userId', responseData.user._id);
+        localStorage.setItem('user', JSON.stringify(responseData.user)); // Store user data
+  
+        toast.success('Login Successful!');
+        window.location.href = '/'; // Redirect to the home page
+      } else {
+        toast.error('Login failed. Please try again.');
+      }
+    });
   };
 
   const onFailure = (error) => {
-    console.error('Login Failed:', error);
+    //console.error('Login Failed:', error);
+    console.error('Google login failed:', error);
+    toast.error('Google login failed. Please try again.');
 
     // toast.error("Login failed. Please try again.");
   };
@@ -74,31 +99,34 @@ const FirebaseLogin = ({ ...others }) => {
       <Grid container direction="column" justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <AnimateButton>
-            <Button
-              disableElevation
-              fullWidth
-              // onClick={googleHandler}
-              size="large"
-              variant="outlined"
-              sx={{
-                color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                {/* <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} /> */}
-              </Box>
-              <GoogleLogin
-                clientId={GoogleConfig.clientId}
-                buttonText="Login with Google"
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                style={{
-                  height: '500px'
-                }}
-              />
-            </Button>
+          <Button
+      variant="outlined"
+      fullWidth
+      sx={{
+        color: 'grey.700',
+        backgroundColor: 'grey.50',
+        borderColor: 'grey.100',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        py: 1.5,
+        borderRadius: 2,
+        textTransform: 'none',
+        '&:hover': {
+          backgroundColor: 'grey.100',
+          borderColor: 'grey.200',
+        },
+      }}
+      onClick={()=>onSuccess()}
+      disabled={loading}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
+        <GoogleIcon sx={{ fontSize: 20, mr: 1 }} /> {/* Google Icon */}
+      </Box>
+      <Typography variant="body1" fontWeight="500">
+        {loading ? 'Logging in...' : 'Login with Google'}
+      </Typography>
+    </Button>
           </AnimateButton>
         </Grid>
         <Grid item xs={12}>

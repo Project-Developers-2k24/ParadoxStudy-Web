@@ -31,7 +31,7 @@ import { Formik } from 'formik';
 import Google from 'assets/images/icons/social-google.svg';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
-
+import GoogleIcon from '@mui/icons-material/Google'; 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -48,13 +48,39 @@ const FirebaseRegister = ({ ...others }) => {
   const customization = useSelector((state) => state.customization);
   const [showPassword, setShowPassword] = useState(false);
   const [checked, setChecked] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const [strength, setStrength] = useState(0);
   const [level, setLevel] = useState();
 
-  const googleHandler = async () => {
-    console.error('Register');
-  };
+  
+    const googleHandler = async (response) => {
+      setLoading(true);
+  
+      // Open the Google authentication URL in a new window
+      const popup = window.open('http://localhost:8000/api/user/google', 'GoogleLogin', 'width=600,height=600');
+    
+      // Listen for messages from the popup window
+      window.addEventListener('message', (event) => {
+        if (event.origin !== 'http://localhost:8000') return; // Replace with your backend URL
+    
+        const responseData = event.data; // Get the data sent from the backend
+    
+        if (responseData.status) {
+          // Successfully logged in
+          console.log('User Data:', responseData.user); // Log the user data from the response
+          localStorage.setItem('token', responseData.token); 
+          // Store the token
+          localStorage.setItem('userId', responseData.user._id);
+          localStorage.setItem('user', JSON.stringify(responseData.user)); // Store user data
+    
+          toast.success('Login Successful!');
+          window.location.href = '/'; // Redirect to the home page
+        } else {
+          toast.error('Login failed. Please try again.');
+        }
+      });
+    };
+
   const handleFormSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
     try {
       // // Step 4: Send a POST request to your register endpoint
@@ -97,22 +123,34 @@ const FirebaseRegister = ({ ...others }) => {
       <Grid container direction="column" justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <AnimateButton>
-            <Button
-              variant="outlined"
-              fullWidth
-              onClick={googleHandler}
-              size="large"
-              sx={{
-                color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-              </Box>
-              Sign up with Google
-            </Button>
+          <Button
+      variant="outlined"
+      fullWidth
+      sx={{
+        color: 'grey.700',
+        backgroundColor: 'grey.50',
+        borderColor: 'grey.100',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        py: 1.5,
+        borderRadius: 2,
+        textTransform: 'none',
+        '&:hover': {
+          backgroundColor: 'grey.100',
+          borderColor: 'grey.200',
+        },
+      }}
+      onClick={()=>googleHandler()}
+      disabled={loading}
+    >
+      <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
+        <GoogleIcon sx={{ fontSize: 20, mr: 1 }} /> {/* Google Icon */}
+      </Box>
+      <Typography variant="body1" fontWeight="500">
+        {loading ? 'Logging in...' : 'Login with Google'}
+      </Typography>
+    </Button>
           </AnimateButton>
         </Grid>
         <Grid item xs={12}>
@@ -280,7 +318,7 @@ const FirebaseRegister = ({ ...others }) => {
                     </Typography>
                   }
                 />
-                <Typography
+                {/* <Typography
                   variant="subtitle1"
                   style={{
                     color: 'red',
@@ -294,7 +332,7 @@ const FirebaseRegister = ({ ...others }) => {
                   }}
                 >
                   Registration is currently disabled due to heavy maintenance. We will be back soon.
-                </Typography>
+                </Typography> */}
               </Grid>
             </Grid>
             {errors.submit && (
@@ -308,7 +346,7 @@ const FirebaseRegister = ({ ...others }) => {
                 {/* <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign up
                 </Button> */}
-                <Button disableElevation disabled={true} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button disableElevation disabled={false} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign up
                 </Button>
               </AnimateButton>
