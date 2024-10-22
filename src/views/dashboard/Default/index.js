@@ -170,7 +170,8 @@ const Dashboard = () => {
               background: `url(${bgimage}) no-repeat center center fixed`,
               backgroundSize: 'cover',
               minHeight: '100vh',
-              borderRadius: '50px'
+              borderRadius: '20px',
+              marginTop:1
             }}
           >
             <Grid item lg={12} md={6} sm={6} xs={12}>
