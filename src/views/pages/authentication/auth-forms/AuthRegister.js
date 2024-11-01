@@ -57,11 +57,11 @@ const FirebaseRegister = ({ ...others }) => {
       setLoading(true);
   
       // Open the Google authentication URL in a new window
-      const popup = window.open('http://localhost:8000/api/user/google', 'GoogleLogin', 'width=600,height=600');
+      const popup = window.open('https://projectdev2114.azurewebsites.net/api/user/google', 'GoogleLogin', 'width=600,height=600');
     
       // Listen for messages from the popup window
       window.addEventListener('message', (event) => {
-        if (event.origin !== 'http://localhost:8000') return; // Replace with your backend URL
+        if (event.origin !== 'https://projectdev2114.azurewebsites.net') return; // Replace with your backend URL
     
         const responseData = event.data; // Get the data sent from the backend
     
@@ -142,7 +142,9 @@ const FirebaseRegister = ({ ...others }) => {
         },
       }}
       onClick={()=>googleHandler()}
-      disabled={loading}
+      // disabled={loading}
+      disabled={true}
+      
     >
       <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
         <GoogleIcon sx={{ fontSize: 20, mr: 1 }} /> {/* Google Icon */}
@@ -346,7 +348,7 @@ const FirebaseRegister = ({ ...others }) => {
                 {/* <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign up
                 </Button> */}
-                <Button disableElevation disabled={false} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button disableElevation disabled={true} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign up
                 </Button>
               </AnimateButton>
