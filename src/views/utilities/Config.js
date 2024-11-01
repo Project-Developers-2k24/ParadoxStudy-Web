@@ -1,3 +1,3 @@
 export const GoogleConfig = {
-  clientId: '1048284937462-n58jnnoh11fedd0fn2rtdempih7v75j6.apps.googleusercontent.com'
+  clientId: '1048284937462-lmeffavmkmuekatbqp6ibee6bf6bt2q0.apps.googleusercontent.com'
 };
