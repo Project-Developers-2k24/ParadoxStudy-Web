@@ -83,7 +83,7 @@ const FirebaseRegister = ({ ...others }) => {
         localStorage.setItem('user', JSON.stringify(responseData.user));
 
         toast.success('Login Successful!');
-        navigate('/');
+        window.location.href = '/';
         setLoading(false);
       } else {
         setLoading(false);
