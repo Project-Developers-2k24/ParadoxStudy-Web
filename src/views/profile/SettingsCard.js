@@ -204,9 +204,8 @@ export default function SettingsCard(props) {
         <CardContent
           sx={{
             p: 3,
-            maxHeight: { md: '50vh' },
             textAlign: { xs: 'center', md: 'start' },
-            pb: '10rem' // Adjusted bottom padding to make space for the button
+            // pb: '10rem',
           }}
         >
           <FormControl fullWidth>
@@ -215,9 +214,6 @@ export default function SettingsCard(props) {
               direction={{ xs: 'column', md: 'row' }}
               columnSpacing={5}
               rowSpacing={3}
-              style={{
-                paddingBottom: '50px'
-              }}
             >
               <Grid item xs={6}>
                 <CustomInput
@@ -347,7 +343,7 @@ export default function SettingsCard(props) {
                 ></CustomInput>
               </Grid>
 
-              <Grid container justifyContent={{ xs: 'center', md: 'flex-end' }} item xs={6} sx={{ mb: 10 }}>
+              <Grid container justifyContent={{ xs: 'center', md: 'flex-end' }} item xs={6}>
                 <Button
                   sx={{ my: 2, mb: 2, py: '1rem', height: '3rem' }} // Added py: '1rem' for padding
                   component="button"
