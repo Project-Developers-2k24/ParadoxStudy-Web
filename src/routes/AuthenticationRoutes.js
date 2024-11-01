@@ -12,7 +12,6 @@ import ForgotPassword from 'views/pages/authentication/authentication3/ForgotPas
 import ResetPassword from 'views/pages/authentication/authentication3/ResetPassword';
 import Verified from 'views/pages/authentication/Verified';
 import UnauthorizedRoute from './UnAuthorizedRoutes';
-
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 const token = localStorage.getItem('token');
 const isAuthorized = !!token;

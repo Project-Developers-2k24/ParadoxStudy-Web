@@ -21,6 +21,7 @@ import {
   Typography
   // useMediaQuery
 } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google';
 import { GoogleLogin } from 'react-google-login';
 // third party
 import * as Yup from 'yup';
@@ -47,16 +48,52 @@ const FirebaseLogin = ({ ...others }) => {
   // const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
   const [checked, setChecked] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  const onSuccess = (response) => {
-    console.log('Login Successful:', response.profileObj);
-    // localStorage.setItem('users', JSON.stringify(response.profileObj));
-    // navigation("/orderDetails");
-    // toast.success("Login Successful: "+ response.profileObj.name)
+  const onSuccess = async (response) => {
+    setLoading(true);
+
+    // Open the Google authentication URL in a new window
+    const popup = window.open('https://projectdev2114.azurewebsites.net/api/user/google', 'GoogleLogin', 'width=600,height=600');
+
+    // Polling interval to check if popup is closed
+    const popupChecker = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(popupChecker);
+        setLoading(false);
+        toast.error('Login was canceled');
+      }
+    }, 500);
+
+    // Listen for messages from the popup window
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://projectdev2114.azurewebsites.net') return;
+
+      const responseData = event.data;
+      console.log(responseData);
+
+      clearInterval(popupChecker); // Stop checking once we receive a message
+
+      if (responseData.status) {
+        console.log('User Data:', responseData.user);
+        localStorage.setItem('token', responseData.token);
+        localStorage.setItem('userId', responseData.user._id);
+        localStorage.setItem('user', JSON.stringify(responseData.user));
+
+        toast.success('Login Successful!');
+        window.location.href = '/';
+        setLoading(false);
+      } else {
+        setLoading(false);
+        toast.error('Login failed. Please try again.');
+      }
+    });
   };
 
   const onFailure = (error) => {
-    console.error('Login Failed:', error);
+    //console.error('Login Failed:', error);
+    console.error('Google login failed:', error);
+    toast.error('Google login failed. Please try again.');
 
     // toast.error("Login failed. Please try again.");
   };
@@ -75,29 +112,33 @@ const FirebaseLogin = ({ ...others }) => {
         <Grid item xs={12}>
           <AnimateButton>
             <Button
-              disableElevation
-              fullWidth
-              // onClick={googleHandler}
-              size="large"
               variant="outlined"
+              fullWidth
               sx={{
                 color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
+                backgroundColor: 'grey.50',
+                borderColor: 'grey.100',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: 'grey.100',
+                  borderColor: 'grey.200'
+                }
               }}
+              onClick={() => onSuccess()}
+              // disabled={true}
+              disabled={loading}
             >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                {/* <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} /> */}
+              <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
+                <GoogleIcon sx={{ fontSize: 20, mr: 1 }} /> {/* Google Icon */}
               </Box>
-              <GoogleLogin
-                clientId={GoogleConfig.clientId}
-                buttonText="Login with Google"
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-                style={{
-                  height: '500px'
-                }}
-              />
+              <Typography variant="body1" fontWeight="500">
+                {loading ? 'Logging in...' : 'Login with Google'}
+              </Typography>
             </Button>
           </AnimateButton>
         </Grid>
@@ -164,9 +205,9 @@ const FirebaseLogin = ({ ...others }) => {
               localStorage.setItem('token', response.data.token);
               localStorage.setItem('userId', response.data.user._id);
               console.log(response.data._id);
-              window.location.href = '/';
               toast.success(response.data.message);
               setStatus({ success: true });
+              navigate('/');
               setSubmitting(false);
             } else {
               // Registration failed
