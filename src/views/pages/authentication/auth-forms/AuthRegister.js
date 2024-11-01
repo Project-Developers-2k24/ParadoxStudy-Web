@@ -31,7 +31,7 @@ import { Formik } from 'formik';
 import Google from 'assets/images/icons/social-google.svg';
 import AnimateButton from 'ui-component/extended/AnimateButton';
 import { strengthColor, strengthIndicator } from 'utils/password-strength';
-import GoogleIcon from '@mui/icons-material/Google'; 
+import GoogleIcon from '@mui/icons-material/Google';
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
@@ -52,34 +52,45 @@ const FirebaseRegister = ({ ...others }) => {
   const [strength, setStrength] = useState(0);
   const [level, setLevel] = useState();
 
-  
-    const googleHandler = async (response) => {
-      setLoading(true);
-  
-      // Open the Google authentication URL in a new window
-      const popup = window.open('https://projectdev2114.azurewebsites.net/api/user/google', 'GoogleLogin', 'width=600,height=600');
-    
-      // Listen for messages from the popup window
-      window.addEventListener('message', (event) => {
-        if (event.origin !== 'https://projectdev2114.azurewebsites.net') return; // Replace with your backend URL
-    
-        const responseData = event.data; // Get the data sent from the backend
-    
-        if (responseData.status) {
-          // Successfully logged in
-          console.log('User Data:', responseData.user); // Log the user data from the response
-          localStorage.setItem('token', responseData.token); 
-          // Store the token
-          localStorage.setItem('userId', responseData.user._id);
-          localStorage.setItem('user', JSON.stringify(responseData.user)); // Store user data
-    
-          toast.success('Login Successful!');
-          window.location.href = '/'; // Redirect to the home page
-        } else {
-          toast.error('Login failed. Please try again.');
-        }
-      });
-    };
+  const googleHandler = async (response) => {
+    setLoading(true);
+
+    // Open the Google authentication URL in a new window
+    const popup = window.open('https://projectdev2114.azurewebsites.net/api/user/google', 'GoogleLogin', 'width=600,height=600');
+
+    // Polling interval to check if popup is closed
+    const popupChecker = setInterval(() => {
+      if (popup.closed) {
+        clearInterval(popupChecker);
+        setLoading(false);
+        toast.error('Login was canceled');
+      }
+    }, 500);
+
+    // Listen for messages from the popup window
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://projectdev2114.azurewebsites.net') return;
+
+      const responseData = event.data;
+      console.log(responseData);
+
+      clearInterval(popupChecker); // Stop checking once we receive a message
+
+      if (responseData.status) {
+        console.log('User Data:', responseData.user);
+        localStorage.setItem('token', responseData.token);
+        localStorage.setItem('userId', responseData.user._id);
+        localStorage.setItem('user', JSON.stringify(responseData.user));
+
+        toast.success('Login Successful!');
+        navigate('/');
+        setLoading(false);
+      } else {
+        setLoading(false);
+        toast.error('Login failed. Please try again.');
+      }
+    });
+  };
 
   const handleFormSubmit = async (values, { setErrors, setStatus, setSubmitting }) => {
     try {
@@ -123,36 +134,35 @@ const FirebaseRegister = ({ ...others }) => {
       <Grid container direction="column" justifyContent="center" spacing={2}>
         <Grid item xs={12}>
           <AnimateButton>
-          <Button
-      variant="outlined"
-      fullWidth
-      sx={{
-        color: 'grey.700',
-        backgroundColor: 'grey.50',
-        borderColor: 'grey.100',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        py: 1.5,
-        borderRadius: 2,
-        textTransform: 'none',
-        '&:hover': {
-          backgroundColor: 'grey.100',
-          borderColor: 'grey.200',
-        },
-      }}
-      onClick={()=>googleHandler()}
-      // disabled={loading}
-      disabled={true}
-      
-    >
-      <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
-        <GoogleIcon sx={{ fontSize: 20, mr: 1 }} /> {/* Google Icon */}
-      </Box>
-      <Typography variant="body1" fontWeight="500">
-        {loading ? 'Logging in...' : 'Login with Google'}
-      </Typography>
-    </Button>
+            <Button
+              variant="outlined"
+              fullWidth
+              sx={{
+                color: 'grey.700',
+                backgroundColor: 'grey.50',
+                borderColor: 'grey.100',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: 'none',
+                '&:hover': {
+                  backgroundColor: 'grey.100',
+                  borderColor: 'grey.200'
+                }
+              }}
+              onClick={() => googleHandler()}
+              disabled={loading}
+              // disabled={true}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
+                <GoogleIcon sx={{ fontSize: 20, mr: 1 }} /> {/* Google Icon */}
+              </Box>
+              <Typography variant="body1" fontWeight="500">
+                {loading ? 'Logging in...' : 'Login with Google'}
+              </Typography>
+            </Button>
           </AnimateButton>
         </Grid>
         <Grid item xs={12}>
@@ -348,7 +358,7 @@ const FirebaseRegister = ({ ...others }) => {
                 {/* <Button disableElevation disabled={isSubmitting} fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign up
                 </Button> */}
-                <Button disableElevation disabled={true} fullWidth size="large" type="submit" variant="contained" color="secondary">
+                <Button disableElevation fullWidth size="large" type="submit" variant="contained" color="secondary">
                   Sign up
                 </Button>
               </AnimateButton>
