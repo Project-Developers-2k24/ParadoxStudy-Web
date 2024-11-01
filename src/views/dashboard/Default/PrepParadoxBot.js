@@ -26,7 +26,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  Box
 } from '@mui/material';
 import { useMediaQuery } from '@mui/material';
 import lottieJson from '../../../utils/Animation - 1716087479028.json';
@@ -51,6 +52,7 @@ import { px } from 'framer-motion';
 import LoadingParadox from 'views/utilities/LoadingParadox';
 import { useQuery } from 'react-query';
 import mermaid from 'mermaid';
+import { flexbox } from '@mui/system';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 const ChatBot = () => {
   useEffect(() => {
@@ -361,7 +363,7 @@ const ChatBot = () => {
       {isChatLoading && currentPage == 1 ? (
         <LoadingParadox />
       ) : (
-        <div style={{ position: 'relative', backgroundColor: 'white', minHeight: '100vh', borderRadius: '10px', padding: '10px' }}>
+        <div style={{ position: 'relative', minHeight: '100vh', borderRadius: '10px' }}>
           <AppBar position="static" color="primary" sx={{ borderRadius: '10px', height: '50px', marginBottom: '10px' }}>
             <Stack direction="row" alignItems="center">
               {userDataLoading ? (
@@ -643,45 +645,60 @@ const ChatBot = () => {
                   }
                 }}
               >
-                <Button
-                  onClick={handleOpenDialog}
-                  variant="contained"
-                  color="primary"
-                  size="small" // Reduce button size
-                  sx={{ marginRight: isSmallScreen ? 50 : 2 }} // Adjust margin for smaller screens
-                >
-                  Open PDF
-                </Button>
-                <TextField
-                  variant="outlined"
-                  placeholder="Enter your query"
-                  value={messageInput}
-                  onChange={(e) => setMessageInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      sendMessage(messageInput);
-                    }
-                  }}
-                  fullWidth
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
-                          {isLoading ? <CircularProgress size={24} /> : <SendIcon />}
-                        </IconButton>
-                      </InputAdornment>
-                    )
-                  }}
+                <Box
                   sx={{
-                    '& .MuiInputBase-root': {
-                      borderRadius: '10px',
-                      backgroundColor: 'white'
-                    },
-                    '& .Mui-focused fieldset': {
-                      borderColor: 'white'
-                    }
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    gap: 2,
+                    width: "100%",
+                    marginRight: 7
                   }}
-                />
+                >
+                  <Button
+                    onClick={handleOpenDialog}
+                    variant="contained"
+                    color="primary"
+                    size="medium"
+                    sx={{ marginRight: 2 }}
+                  >
+                    Open PDF
+                  </Button>
+
+                  <TextField
+                    variant="outlined"
+                    placeholder="Enter your query"
+                    value={messageInput}
+                    onChange={(e) => setMessageInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        sendMessage(messageInput);
+                      }
+                    }}
+                    fullWidth
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton edge="end" color="primary" onClick={() => sendMessage(messageInput)}>
+                            {isLoading ? <CircularProgress size={24} /> : <SendIcon />}
+                          </IconButton>
+                        </InputAdornment>
+                      )
+                    }}
+                    sx={{
+                      flexGrow: 1,
+                      '& .MuiInputBase-root': {
+                        borderRadius: '10px',
+                        backgroundColor: 'white'
+                      },
+                      '& .Mui-focused fieldset': {
+                        borderColor: 'white'
+                      },
+                      width: { xs: '100%', sm: '70%' },
+                    }}
+                  />
+                </Box>
+
               </Stack>
             </Grid>
           </Grid>

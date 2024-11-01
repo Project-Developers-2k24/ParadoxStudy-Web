@@ -33,7 +33,7 @@
 
 //   // const getchat = async () => {
 //   //   try {
-//   //     const res = await axios.get('https://projectdev2114.azurewebsites.net/api/user/wakeUp');
+//   //     const res = await axios.get('http://localhost:8000/api/user/wakeUp');
 //   //     console.log(res.data);
 //   //   } catch (error) {
 //   //     console.log(error);
@@ -124,7 +124,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Grid, Box, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+// import AnimateButton from 'ui-component/extended/AnimateButton';
 import Footer from '../Footer';
 import { bgimage } from '../../../assets/images/index';
 import { gridSpacing } from 'store/constant';
@@ -132,6 +132,7 @@ import Animationfront from 'components/Animationfront';
 import useTypematerial from 'components/TypeAnimation';
 import './Style.css';
 import LoadingDashboard from 'views/utilities/LoadingDashboard'; // Import the loading component
+import AnimatedButton from 'ui-component/Button/AnimatedButton';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 const Dashboard = () => {
@@ -154,14 +155,12 @@ const Dashboard = () => {
     navigate('/year');
   };
 
-
   return (
     <>
       {isLoading ? (
         <LoadingDashboard />
       ) : (
         <>
-
           <Grid
             container
             spacing={gridSpacing}
@@ -170,7 +169,8 @@ const Dashboard = () => {
               background: `url(${bgimage}) no-repeat center center fixed`,
               backgroundSize: 'cover',
               minHeight: '100vh',
-              borderRadius: '50px'
+              borderRadius: '20px',
+              marginTop: 1
             }}
           >
             <Grid item lg={12} md={6} sm={6} xs={12}>
@@ -186,24 +186,15 @@ const Dashboard = () => {
                       {assignment}
                     </Typography>
                     <Typography color="white" variant="body1" fontSize="15px" sx={{ mb: 3 }}>
-                      Unlock the power of learning: Paradox Study is your gateway to a vast collection of curated notes, resources, and insights
-                      across various subjects and disciplines. Whether you are a student, educator, or lifelong learner, our platform is
-                      designed to fuel your curiosity, ignite your passion for learning, and help you excel in your academic journey.
+                      Unlock the power of learning: Paradox Study is your gateway to a vast collection of curated notes, resources, and
+                      insights across various subjects and disciplines. Whether you are a student, educator, or lifelong learner, our
+                      platform is designed to fuel your curiosity, ignite your passion for learning, and help you excel in your academic
+                      journey.
                     </Typography>
-                    <Box sx={{ mt: 2 }}>
-                      <AnimateButton>
-                        <Button
-                          disableElevation
-                          halfWidth
-                          size="large"
-                          type="submit"
-                          variant="contained"
-                          color="secondary"
-                          onClick={handleExploreNowClick}
-                        >
-                          Explore Now
-                        </Button>
-                      </AnimateButton>
+                    <Box sx={{ mt: 2, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                      <Button onClick={handleExploreNowClick}>
+                        <AnimatedButton />
+                      </Button>
                     </Box>
                   </Box>
                 </Grid>
@@ -225,7 +216,6 @@ const Dashboard = () => {
           <Grid item lg={12} md={7} sm={6} xs={12}>
             <Footer isLoading={isLoading} />
           </Grid>
-
         </>
       )}
     </>
